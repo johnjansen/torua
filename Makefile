@@ -13,6 +13,23 @@ build:
 	go build $(GOFLAGS) -o bin/node ./cmd/node
 	echo "bin/coordinator and bin/node built."
 
+test:
+	go test -v ./...
+
+test-coverage:
+	go test -v -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out -o coverage.html
+	echo "Coverage report generated: coverage.html"
+
+test-coverage-text:
+	go test -v -coverprofile=coverage.out ./...
+	go tool cover -func=coverage.out
+
+clean:
+	rm -f bin/coordinator bin/node
+	rm -f coverage.out coverage.html
+	echo "Cleaned build artifacts and coverage files."
+
 run-coordinator:
 	COORDINATOR_ADDR=:8080 go run ./cmd/coordinator
 

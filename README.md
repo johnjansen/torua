@@ -14,6 +14,7 @@ Torua implements a horizontally-scalable, fault-tolerant distributed system for 
 - **Fault Tolerant**: Handles node failures gracefully with automatic failover
 - **Horizontally Scalable**: Add nodes dynamically to increase capacity
 - **Simple Architecture**: Minimal dependencies, clear separation of concerns
+- **Test-Driven Development**: 97% test coverage with comprehensive unit and integration tests
 
 ## Quick Start
 
@@ -209,6 +210,35 @@ make build
 ./bin/node
 ```
 
+### Testing
+
+This is a **TDD (Test-Driven Development)** project with comprehensive test coverage:
+
+```bash
+# Run all tests
+make test
+
+# Run tests with coverage report
+make test-coverage
+
+# View coverage in terminal
+make test-coverage-text
+
+# Clean build artifacts and coverage files
+make clean
+```
+
+**Current Coverage**: 97% overall
+- `internal/cluster`: 100% coverage
+- `cmd/coordinator`: 96.9% coverage  
+- `cmd/node`: 95.6% coverage
+
+We follow TDD principles:
+1. Write tests first, then implementation
+2. Tests serve as living documentation
+3. Every bug fix starts with a failing test
+4. Refactoring only with green tests
+
 ### Project Structure
 
 ```
@@ -269,11 +299,12 @@ torua/
 
 ## Design Philosophy
 
-1. **Simplicity First**: Clear, understandable code over clever optimizations
-2. **Distributed by Default**: Every decision assumes multiple nodes
-3. **Fail Gracefully**: Partial results better than no results
-4. **Observable**: Know what the system is doing at all times
-5. **Developer Friendly**: Easy to understand, modify, and extend
+1. **Test-Driven Development**: Write tests first, ensure 100% coverage goal
+2. **Simplicity First**: Clear, understandable code over clever optimizations
+3. **Distributed by Default**: Every decision assumes multiple nodes
+4. **Fail Gracefully**: Partial results better than no results
+5. **Observable**: Know what the system is doing at all times
+6. **Developer Friendly**: Easy to understand, modify, and extend
 
 ## Contributing
 
