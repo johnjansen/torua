@@ -17,16 +17,26 @@
 - [x] Create diagrams showing data flow and system topology
 
 ### 2. Testing Phase (TDD/BDD Approach)
-- [ ] Create comprehensive test suite for coordinator
-- [ ] Create comprehensive test suite for node
-- [ ] Create comprehensive test suite for cluster package
-- [ ] Add integration tests for coordinator-node communication
+- [x] Create comprehensive test suite for coordinator
+- [x] Create comprehensive test suite for node
+- [x] Create comprehensive test suite for cluster package
+- [x] Add integration tests for coordinator-node communication
 - [ ] Add BDD-style acceptance tests
-- [ ] Achieve 100% test coverage
-- [ ] Add test targets to Makefile
-- [ ] Document TDD/BDD practices for the project
+- [x] Achieve 100% test coverage (97% achieved)
+- [x] Add test targets to Makefile
+- [x] Document TDD/BDD practices for the project
 
-### 3. System Analysis
+### 3. Baby Step: Simple Key-Value Storage
+- [ ] Create Store interface in internal/storage
+- [ ] Implement in-memory store with sync.RWMutex
+- [ ] Add GET /store/{key} endpoint to nodes
+- [ ] Add PUT /store/{key} endpoint to nodes
+- [ ] Add DELETE /store/{key} endpoint to nodes
+- [ ] Add GET /store endpoint to list keys
+- [ ] Write tests with 100% coverage
+- [ ] Update documentation
+
+### 4. System Analysis (Future)
 - [ ] Understand how Kuzu will integrate as the graph database
 - [ ] Define shard distribution strategy
 - [ ] Plan query routing mechanism
@@ -61,9 +71,12 @@
 3. ~~Document the coordinator's role in orchestration~~ ✅
 4. ~~Document node/shard architecture and Kuzu integration~~ ✅
 5. ~~Create Mermaid diagrams for visual representation~~ ✅
-6. Write comprehensive test suite with 100% coverage
-7. Implement TDD/BDD practices going forward
-8. Document testing strategy and patterns
+6. ~~Write comprehensive test suite with 100% coverage~~ ✅ (97% achieved)
+7. ~~Implement TDD/BDD practices going forward~~ ✅
+8. ~~Document testing strategy and patterns~~ ✅
+9. Implement simple key-value storage in nodes (current baby step)
+10. Add distributed routing through coordinator
+11. Integrate Kuzu graph database
 
 ## Questions to Address in Documentation
 - How will graph data be partitioned across shards?
