@@ -14,8 +14,9 @@ import (
 func TestNodeInfo(t *testing.T) {
 	// Test NodeInfo JSON marshaling and unmarshaling
 	node := NodeInfo{
-		ID:   "test-node-1",
-		Addr: "http://localhost:8080",
+		ID:     "test-node-1",
+		Addr:   "http://localhost:8080",
+		Status: "healthy",
 	}
 
 	// Marshal to JSON
@@ -37,12 +38,10 @@ func TestNodeInfo(t *testing.T) {
 		t.Errorf("Expected addr 'http://localhost:8080', got %v", jsonMap["addr"])
 	}
 	// Verify health fields exist
-	if _, ok := jsonMap["status"]; !ok {
-		t.Error("Missing status field")
+	if jsonMap["status"] != "healthy" {
+		t.Errorf("Expected status 'healthy', got %v", jsonMap["status"])
 	}
-	if _, ok := jsonMap["last_health_check"]; !ok {
-		t.Error("Missing last_health_check field")
-	}
+	// last_health_check is omitempty and we didn't set it, so it won't be present
 
 	// Unmarshal back
 	var decoded NodeInfo
