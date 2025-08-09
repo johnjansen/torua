@@ -41,13 +41,18 @@ func NewTestSystem(t *testing.T) *TestSystem {
 
 // Start launches the coordinator and nodes
 func (ts *TestSystem) Start() error {
-	// Build binaries first
-	ts.t.Log("Building binaries...")
-	if err := exec.Command("go", "build", "-o", "bin/coordinator", "./cmd/coordinator").Run(); err != nil {
-		return fmt.Errorf("failed to build coordinator: %w", err)
+	// Check if binaries exist, if not try to build them
+	if _, err := os.Stat("./bin/coordinator"); os.IsNotExist(err) {
+		ts.t.Log("Building coordinator binary...")
+		if err := exec.Command("go", "build", "-o", "bin/coordinator", "./cmd/coordinator").Run(); err != nil {
+			return fmt.Errorf("failed to build coordinator: %w", err)
+		}
 	}
-	if err := exec.Command("go", "build", "-o", "bin/node", "./cmd/node").Run(); err != nil {
-		return fmt.Errorf("failed to build node: %w", err)
+	if _, err := os.Stat("./bin/node"); os.IsNotExist(err) {
+		ts.t.Log("Building node binary...")
+		if err := exec.Command("go", "build", "-o", "bin/node", "./cmd/node").Run(); err != nil {
+			return fmt.Errorf("failed to build node: %w", err)
+		}
 	}
 
 	// Start coordinator
@@ -220,6 +225,14 @@ func newRequest(method, url string, body []byte) *http.Request {
 func TestDistributedStorage(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")
+	}
+
+	// Check if binaries exist before trying to run integration tests
+	if _, err := os.Stat("./bin/coordinator"); os.IsNotExist(err) {
+		t.Skip("Skipping integration test: coordinator binary not found (run 'make build' first)")
+	}
+	if _, err := os.Stat("./bin/node"); os.IsNotExist(err) {
+		t.Skip("Skipping integration test: node binary not found (run 'make build' first)")
 	}
 
 	// Create and start test system

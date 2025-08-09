@@ -93,15 +93,15 @@ var logFatal = log.Fatalf
 //   - Per shard: Depends on storage backend (currently in-memory)
 //   - 100 shards with 1000 keys each: ~10-100MB
 type Node struct {
-	// ID uniquely identifies this node in the cluster.
-	// Format: typically "node-{number}" or UUID.
-	// Immutable after creation.
-	ID string
-
 	// shards maps shard IDs to their runtime instances.
 	// Created on-demand when coordinator routes requests.
 	// Protected by mu for thread-safe access.
 	shards map[int]*shard.Shard
+
+	// ID uniquely identifies this node in the cluster.
+	// Format: typically "node-{number}" or UUID.
+	// Immutable after creation.
+	ID string
 
 	// mu protects concurrent access to the shards map.
 	// Uses RWMutex to allow multiple concurrent readers.

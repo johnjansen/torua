@@ -66,6 +66,13 @@ import (
 	"github.com/dreamware/torua/internal/coordinator"
 )
 
+// Health status constants for node health monitoring
+const (
+	healthStatusHealthy   = "healthy"
+	healthStatusUnhealthy = "unhealthy"
+	healthStatusUnknown   = "unknown"
+)
+
 // main initializes and runs the coordinator service, setting up HTTP endpoints
 // for cluster management and gracefully handling shutdown signals.
 //
@@ -166,11 +173,6 @@ func main() {
 //   - 100 nodes = ~20KB memory overhead
 //   - Registry overhead depends on shard count (see ShardRegistry docs)
 type server struct {
-	// mu protects concurrent access to the nodes slice.
-	// Uses RWMutex to allow multiple concurrent readers for list operations
-	// while ensuring exclusive access during registration/updates.
-	mu sync.RWMutex
-
 	// nodes contains all registered nodes in the cluster.
 	// Nodes are identified by unique ID and include connection address.
 	// Updated during registration; removed on failure detection (future).
@@ -178,13 +180,16 @@ type server struct {
 
 	// registry manages shard-to-node assignments for data distribution.
 	// Uses consistent hashing to map keys to shards and shards to nodes.
-	// Thread-safe internally, no additional locking needed.
+	// Thread-safe: handles its own synchronization internally.
 	registry *coordinator.ShardRegistry
 
-	// healthMonitor performs periodic health checks on all registered nodes.
-	// Detects node failures and triggers shard redistribution.
-	// Thread-safe internally, no additional locking needed.
+	// healthMonitor periodically checks node health status
 	healthMonitor *coordinator.HealthMonitor
+
+	// mu protects concurrent access to the nodes slice.
+	// Uses RWMutex to allow multiple concurrent readers for list operations
+	// while ensuring exclusive access during registration/updates.
+	mu sync.RWMutex
 }
 
 // newServer creates and initializes a new coordinator server instance with
@@ -318,7 +323,7 @@ func (s *server) markNodeUnhealthy(nodeID string) {
 	// Find and mark the node as unhealthy
 	for i, node := range s.nodes {
 		if node.ID == nodeID {
-			s.nodes[i].Status = "unhealthy"
+			s.nodes[i].Status = healthStatusUnhealthy
 			log.Printf("Marked node %s as unhealthy in cluster", nodeID)
 			return
 		}
@@ -370,12 +375,12 @@ func (s *server) handleListNodes(w http.ResponseWriter, r *http.Request) {
 	for i, node := range s.nodes {
 		nodes[i] = node
 		// Add health status if available, unless already marked unhealthy
-		if node.Status != "unhealthy" {
+		if node.Status != healthStatusUnhealthy {
 			if health := allHealth[node.ID]; health != nil {
 				nodes[i].Status = health.Status
 				nodes[i].LastHealthCheck = health.LastCheck
 			} else {
-				nodes[i].Status = "unknown"
+				nodes[i].Status = healthStatusUnknown
 			}
 		}
 		// Node was explicitly marked unhealthy, preserve that status
@@ -606,7 +611,7 @@ func (s *server) forwardGet(targetURL string, w http.ResponseWriter, r *http.Req
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, targetURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, targetURL, http.NoBody)
 	if err != nil {
 		// Shouldn't happen unless URL is malformed
 		http.Error(w, "failed to create request", http.StatusInternalServerError)
@@ -625,7 +630,9 @@ func (s *server) forwardGet(targetURL string, w http.ResponseWriter, r *http.Req
 	// Stream response back to client
 	// Preserves status code and body from node
 	w.WriteHeader(resp.StatusCode)
-	io.Copy(w, resp.Body)
+	if _, err := io.Copy(w, resp.Body); err != nil {
+		log.Printf("Error copying response body: %v", err)
+	}
 }
 
 // forwardPut forwards a PUT request to a node with the request body,
@@ -689,7 +696,9 @@ func (s *server) forwardPut(targetURL string, w http.ResponseWriter, r *http.Req
 	// Stream response back to client
 	// Preserves status code and body from node
 	w.WriteHeader(resp.StatusCode)
-	io.Copy(w, resp.Body)
+	if _, err := io.Copy(w, resp.Body); err != nil {
+		log.Printf("Error copying response body: %v", err)
+	}
 }
 
 // forwardDelete forwards a DELETE request to a node for removing data,
@@ -720,7 +729,7 @@ func (s *server) forwardDelete(targetURL string, w http.ResponseWriter, r *http.
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, targetURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, targetURL, http.NoBody)
 	if err != nil {
 		// Shouldn't happen unless URL is malformed
 		http.Error(w, "failed to create request", http.StatusInternalServerError)
@@ -908,7 +917,7 @@ func (s *server) autoAssignShards() {
 	// Build list of healthy nodes only
 	var healthyNodes []cluster.NodeInfo
 	for _, node := range s.nodes {
-		if node.Status != "unhealthy" {
+		if node.HealthStatus != healthStatusUnhealthy {
 			healthyNodes = append(healthyNodes, node)
 		}
 	}
@@ -933,7 +942,9 @@ func (s *server) autoAssignShards() {
 			// Select next healthy node in round-robin fashion
 			nodeID := healthyNodes[nodeIndex].ID
 			// Assign as primary (no replicas in current implementation)
-			s.registry.AssignShard(shardID, nodeID, true)
+			if err := s.registry.AssignShard(shardID, nodeID, true); err != nil {
+				log.Printf("Error assigning shard %d to node %s: %v", shardID, nodeID, err)
+			}
 			log.Printf("Auto-assigned shard %d to node %s", shardID, nodeID)
 			// Move to next healthy node for even distribution
 			nodeIndex = (nodeIndex + 1) % len(healthyNodes)

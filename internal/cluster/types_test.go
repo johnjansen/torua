@@ -24,10 +24,24 @@ func TestNodeInfo(t *testing.T) {
 		t.Fatalf("Failed to marshal NodeInfo: %v", err)
 	}
 
-	// Verify JSON structure
-	expected := `{"id":"test-node-1","addr":"http://localhost:8080"}`
-	if string(data) != expected {
-		t.Errorf("Expected JSON %s, got %s", expected, string(data))
+	// Verify JSON structure contains required fields
+	var jsonMap map[string]interface{}
+	if err := json.Unmarshal(data, &jsonMap); err != nil {
+		t.Fatalf("Failed to unmarshal JSON: %v", err)
+	}
+
+	if jsonMap["id"] != "test-node-1" {
+		t.Errorf("Expected id 'test-node-1', got %v", jsonMap["id"])
+	}
+	if jsonMap["addr"] != "http://localhost:8080" {
+		t.Errorf("Expected addr 'http://localhost:8080', got %v", jsonMap["addr"])
+	}
+	// Verify health fields exist
+	if _, ok := jsonMap["health_status"]; !ok {
+		t.Error("Missing health_status field")
+	}
+	if _, ok := jsonMap["last_health_check"]; !ok {
+		t.Error("Missing last_health_check field")
 	}
 
 	// Unmarshal back
