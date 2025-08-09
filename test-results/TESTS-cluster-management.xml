@@ -1,4 +1,4 @@
-<testsuite name="cluster-management.Cluster Management" tests="18" errors="0" failures="0" skipped="18" time="0.0" timestamp="2025-08-10T08:57:04.433905" hostname="Johns-MacBook-Pro-2.local"><testcase classname="cluster-management.Cluster Management" name="Initial cluster formation" status="untested" time="0"><skipped /><system-out>
+<testsuite name="cluster-management.Cluster Management" tests="18" errors="0" failures="0" skipped="18" time="0.0" timestamp="2025-08-10T11:33:32.340048" hostname="Johns-MacBook-Pro-2.local"><testcase classname="cluster-management.Cluster Management" name="Initial cluster formation" status="untested" time="0"><skipped /><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Initial cluster formation

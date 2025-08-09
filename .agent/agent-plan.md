@@ -170,11 +170,22 @@
 - ✅ Large value storage (>1MB)
 - ✅ Performance validation (<50ms response time)
 - ✅ Node failure detection and marking
+- 🔧 **BDD Test Fixes in Progress**
+  - Fixed API response format parsing (nodes/shards wrapped in objects)
+  - Fixed field name mismatches (NodeID vs node_id, addr vs address)
+  - Updated health status expectations (allow 'unknown' for new nodes)
 
 ## Next Priorities
-1. ✅ Fix BDD test environment - COMPLETED
-2. ✅ Fix all BDD test failures - **COMPLETED (100% passing)**
-3. ✅ **Implement comprehensive function documentation - COMPLETED**
+1. 🔧 **Fix CI/CD Pipeline - IN PROGRESS**
+   - Fix BDD test failures in CI
+   - Address all open Dependabot PRs
+   - Get master branch to green status
+2. ✅ Fix BDD test environment - COMPLETED
+3. ⚠️ Fix all BDD test failures - **IN PROGRESS**
+   - Fixed API response format issues
+   - Fixed field name mismatches
+   - Need to address remaining cluster management scenarios
+4. ✅ **Implement comprehensive function documentation - COMPLETED**
    - ✅ Add doc.go files for all packages
    - ✅ Document every function with purpose, mechanism, parameters, returns
    - ✅ Document all types with purpose, invariants, thread safety
@@ -182,7 +193,26 @@
    - ✅ Add file headers explaining purpose and contents
    - ✅ Document component relationships and interactions
 
-## 🎯 NEXT ACTION: Implement Remaining Cluster Management Features
+## 🎯 NEXT ACTION: Fix CI/CD and Process Dependabot PRs
+
+### Immediate Tasks
+1. **Fix BDD test failures locally**
+   - ✅ Fixed API response format issues
+   - ✅ Fixed field name mismatches (NodeID, addr)
+   - ✅ Allow 'unknown' health status for new nodes
+   - 🔧 Debug and fix remaining test failures
+
+2. **Process Dependabot PRs in order**
+   - 11 open PRs to review and merge
+   - Monitor CI after each merge
+   - Fix any breaking changes
+
+3. **Get CI to green status**
+   - Ensure all tests pass
+   - Fix any linting issues
+   - Verify coverage thresholds
+
+## 🎯 THEN: Implement Remaining Cluster Management Features
 
 ### What's Complete
 - ✅ **Health monitoring fully implemented and tested**
