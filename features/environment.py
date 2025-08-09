@@ -137,36 +137,51 @@ class TorquaEnvironment:
                 logger.warning(f"Failed to clean up test directory: {e}")
 
     def start_cluster_with_goreman(self):
-        """Start the entire cluster using goreman."""
-        logger.info("Starting cluster with goreman...")
+        """Start the entire cluster using goreman or directly."""
+        # Check if goreman is available
+        try:
+            subprocess.run(['which', 'goreman'], check=True, capture_output=True)
+            use_goreman = True
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            use_goreman = False
+            logger.info("goreman not found, starting services directly")
 
         # Build services if needed
         self._build_service("coordinator")
         self._build_service("node")
 
-        # Create a Procfile for this test run
-        # Use 2 second health check interval for faster test execution (3 failures * 2s = 6s < 10s timeout)
-        procfile_content = f"""coordinator: HEALTH_CHECK_INTERVAL=2s COORDINATOR_ADDR=:{self.coordinator_port} ./bin/coordinator
+        if use_goreman:
+            logger.info("Starting cluster with goreman...")
+            # Create a Procfile for this test run
+            # Use 2 second health check interval for faster test execution (3 failures * 2s = 6s < 10s timeout)
+            procfile_content = f"""coordinator: HEALTH_CHECK_INTERVAL=2s COORDINATOR_ADDR=:{self.coordinator_port} ./bin/coordinator
 node1: NODE_ID=n1 NODE_LISTEN=:{self.node1_port} NODE_ADDR=http://{self.coordinator_host}:{self.node1_port} COORDINATOR_ADDR=http://{self.coordinator_host}:{self.coordinator_port} ./bin/node
 node2: NODE_ID=n2 NODE_LISTEN=:{self.node2_port} NODE_ADDR=http://{self.coordinator_host}:{self.node2_port} COORDINATOR_ADDR=http://{self.coordinator_host}:{self.coordinator_port} ./bin/node
 """
 
-        procfile_path = self.test_context.test_dir / "Procfile.test"
-        with open(procfile_path, 'w') as f:
-            f.write(procfile_content)
+            procfile_path = self.test_context.test_dir / "Procfile"
+            with open(procfile_path, 'w') as f:
+                f.write(procfile_content)
 
-        # Start goreman
-        log_file = self.test_context.log_dir / "goreman.log"
-        with open(log_file, 'w') as log:
-            process = subprocess.Popen(
-                ['goreman', '-f', str(procfile_path), 'start'],
-                cwd=self._get_project_root(),
-                stdout=log,
-                stderr=subprocess.STDOUT,
-                preexec_fn=os.setsid if sys.platform != 'win32' else None
-            )
-            self.test_context.goreman_process = process
-            self.test_context.processes.append(process)
+            # Start goreman
+            log_file = self.test_context.log_dir / "goreman.log"
+            with open(log_file, 'w') as log:
+                process = subprocess.Popen(
+                    ['goreman', '-f', str(procfile_path), 'start'],
+                    cwd=self._get_project_root(),
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                    preexec_fn=os.setsid if sys.platform != 'win32' else None
+                )
+                self.test_context.goreman_process = process
+                self.test_context.processes.append(process)
+        else:
+            logger.info("Starting services directly...")
+            # Start coordinator first
+            self._start_coordinator_directly()
+            # Start nodes
+            self._start_node_directly("n1", self.node1_port)
+            self._start_node_directly("n2", self.node2_port)
 
         # Set up process info for coordinator
         self.test_context.coordinator = ProcessInfo(
@@ -195,6 +210,83 @@ node2: NODE_ID=n2 NODE_LISTEN=:{self.node2_port} NODE_ADDR=http://{self.coordina
         self._wait_for_node_registration("n1")
         self._wait_for_node_registration("n2")
         logger.info("All nodes registered with coordinator")
+
+    def _start_coordinator_directly(self):
+        """Start the coordinator process directly without goreman."""
+        logger.info(f"Starting coordinator on port {self.coordinator_port}...")
+
+        coord = ProcessInfo(
+            name="coordinator",
+            port=self.coordinator_port,
+            host=self.coordinator_host,
+            log_file=self.test_context.log_dir / "coordinator.log"
+        )
+
+        env = os.environ.copy()
+        env['COORDINATOR_ADDR'] = f':{self.coordinator_port}'
+        env['HEALTH_CHECK_INTERVAL'] = '2s'
+
+        with open(coord.log_file, 'w') as log:
+            process = subprocess.Popen(
+                ['./bin/coordinator'],
+                cwd=self._get_project_root(),
+                env=env,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                preexec_fn=os.setsid if sys.platform != 'win32' else None
+            )
+            coord.process = process
+            coord.pid = process.pid
+            self.test_context.processes.append(process)
+            self.test_context.coordinator = coord
+
+        # Wait for coordinator to be ready
+        self._wait_for_service(coord.url + "/health")
+        logger.info(f"Coordinator started on port {self.coordinator_port}")
+
+    def _start_node_directly(self, node_id: str, port: int):
+        """Start a node process directly without goreman."""
+        logger.info(f"Starting node {node_id} on port {port}...")
+
+        node = ProcessInfo(
+            name=node_id,
+            port=port,
+            host=self.coordinator_host,
+            log_file=self.test_context.log_dir / f"{node_id}.log"
+        )
+
+        env = os.environ.copy()
+        env['NODE_ID'] = node_id
+        env['NODE_LISTEN'] = f':{port}'
+        env['NODE_ADDR'] = f'http://{self.coordinator_host}:{port}'
+        env['COORDINATOR_ADDR'] = f'http://{self.coordinator_host}:{self.coordinator_port}'
+        env['HEALTH_CHECK_INTERVAL'] = '2s'
+
+        # Create node data directory
+        node_data_dir = self.test_context.data_dir / node_id
+        node_data_dir.mkdir(parents=True, exist_ok=True)
+        env['DATA_DIR'] = str(node_data_dir)
+
+        with open(node.log_file, 'w') as log:
+            process = subprocess.Popen(
+                ['./bin/node'],
+                cwd=self._get_project_root(),
+                env=env,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                preexec_fn=os.setsid if sys.platform != 'win32' else None
+            )
+            node.process = process
+            node.pid = process.pid
+            self.test_context.processes.append(process)
+            self.test_context.nodes[node_id] = node
+
+        # Wait for node to be ready
+        self._wait_for_service(node.url + "/health")
+        logger.info(f"Node {node_id} started on port {port}")
+
+        # Wait for node to register with coordinator
+        self._wait_for_node_registration(node_id)
 
     def start_coordinator(self):
         """Start the coordinator process (deprecated - use start_cluster_with_goreman)."""

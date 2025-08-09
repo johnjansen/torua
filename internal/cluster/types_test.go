@@ -37,8 +37,8 @@ func TestNodeInfo(t *testing.T) {
 		t.Errorf("Expected addr 'http://localhost:8080', got %v", jsonMap["addr"])
 	}
 	// Verify health fields exist
-	if _, ok := jsonMap["health_status"]; !ok {
-		t.Error("Missing health_status field")
+	if _, ok := jsonMap["status"]; !ok {
+		t.Error("Missing status field")
 	}
 	if _, ok := jsonMap["last_health_check"]; !ok {
 		t.Error("Missing last_health_check field")
