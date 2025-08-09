@@ -1,0 +1,58 @@
+# Build stage
+FROM golang:1.23-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache git make
+
+# Set working directory
+WORKDIR /app
+
+# Copy go mod files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the node binary
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o node ./cmd/node
+
+# Final stage
+FROM alpine:3.19
+
+# Install runtime dependencies
+RUN apk --no-cache add ca-certificates
+
+# Create non-root user
+RUN addgroup -g 1000 torua && \
+    adduser -D -s /bin/sh -u 1000 -G torua torua
+
+# Set working directory
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/node /app/node
+
+# Create data directory
+RUN mkdir -p /app/data && chown -R torua:torua /app
+
+# Switch to non-root user
+USER torua
+
+# Expose default port (will be overridden by NODE_LISTEN)
+EXPOSE 8081
+
+# Set environment variable defaults
+ENV NODE_ID=""
+ENV NODE_LISTEN=:8081
+ENV NODE_ADDR=""
+ENV COORDINATOR_ADDR=""
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8081/health || exit 1
+
+# Run the node
+ENTRYPOINT ["/app/node"]

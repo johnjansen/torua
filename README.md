@@ -1,5 +1,12 @@
 # Torua - Distributed GraphRAG System
 
+[![CI](https://github.com/johnjansen/torua/actions/workflows/ci.yml/badge.svg)](https://github.com/johnjansen/torua/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/johnjansen/torua)](https://goreportcard.com/report/github.com/johnjansen/torua)
+[![GoDoc](https://pkg.go.dev/badge/github.com/johnjansen/torua)](https://pkg.go.dev/github.com/johnjansen/torua)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Version](https://img.shields.io/badge/Go-1.23%2B-blue.svg)](https://go.dev/)
+[![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen.svg)](https://codecov.io/gh/johnjansen/torua)
+
 A lightweight, distributed Graph Retrieval-Augmented Generation (GraphRAG) system built on simplified Elasticsearch-like architecture with Kuzu as the embedded graph database engine.
 
 ## Overview
@@ -24,6 +31,7 @@ Torua implements a horizontally-scalable, fault-tolerant distributed system for 
 - Make
 - curl (for testing)
 - jq (optional, for pretty JSON output)
+- Docker & Docker Compose (optional, for containerized deployment)
 
 ### Running a Local Cluster
 
@@ -70,6 +78,22 @@ goreman start
 ```
 
 This starts the coordinator and two nodes automatically.
+
+### Using Docker Compose
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# Scale to more nodes
+docker-compose --profile scale up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
 
 ## System Architecture
 
@@ -218,8 +242,11 @@ This is a **TDD (Test-Driven Development)** project with comprehensive test cove
 # Run all tests
 make test
 
-# Run tests with coverage report
+# Run unit tests with coverage
 make test-coverage
+
+# Run BDD tests
+make test-bdd
 
 # View coverage in terminal
 make test-coverage-text
@@ -334,9 +361,21 @@ We welcome contributions! Key areas where help is needed:
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed status and roadmap.
 See [ISSUES_AND_SOLUTIONS.md](ISSUES_AND_SOLUTIONS.md) for critical issues and proposed fixes.
 
+## Community
+
+### Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started.
+
+### Support
+
+- **Issues**: [GitHub Issues](https://github.com/johnjansen/torua/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/johnjansen/torua/discussions)
+- **Security**: Please report security vulnerabilities to [security@torua.dev](mailto:security@torua.dev)
+
 ## License
 
-[LICENSE file to be added]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 

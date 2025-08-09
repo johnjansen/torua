@@ -1,0 +1,212 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.23']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run go fmt
+      run: |
+        fmt_output=$(go fmt ./...)
+        if [ -n "$fmt_output" ]; then
+          echo "The following files need formatting:"
+          echo "$fmt_output"
+          exit 1
+        fi
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Run unit tests
+      run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+
+    - name: Generate coverage report
+      run: go tool cover -html=coverage.out -o coverage.html
+
+    - name: Check test coverage
+      run: |
+        coverage=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+        echo "Total coverage: ${coverage}%"
+        if (( $(echo "$coverage < 90" | bc -l) )); then
+          echo "Coverage is below 90% threshold"
+          exit 1
+        fi
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.out
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  bdd-tests:
+    name: BDD Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-test.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+
+    - name: Build binaries
+      run: make build
+
+    - name: Run BDD tests
+      run: |
+        python run_bdd_tests.py
+
+    - name: Upload BDD test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: bdd-test-results
+        path: test-results/
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [test, bdd-tests]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Build coordinator
+      run: go build -v -o bin/coordinator ./cmd/coordinator
+
+    - name: Build node
+      run: go build -v -o bin/node ./cmd/node
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: binaries
+        path: bin/
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Download binaries
+      uses: actions/download-artifact@v3
+      with:
+        name: binaries
+        path: bin/
+
+    - name: Make binaries executable
+      run: chmod +x bin/*
+
+    - name: Run integration tests
+      run: |
+        # Start coordinator in background
+        ./bin/coordinator &
+        COORD_PID=$!
+        sleep 2
+
+        # Start nodes in background
+        NODE_ID=n1 NODE_LISTEN=:8081 NODE_ADDR=http://127.0.0.1:8081 \
+          COORDINATOR_ADDR=http://127.0.0.1:8080 ./bin/node &
+        NODE1_PID=$!
+
+        NODE_ID=n2 NODE_LISTEN=:8082 NODE_ADDR=http://127.0.0.1:8082 \
+          COORDINATOR_ADDR=http://127.0.0.1:8080 ./bin/node &
+        NODE2_PID=$!
+
+        sleep 3
+
+        # Run integration test suite
+        go test -v ./test/integration/...
+        TEST_RESULT=$?
+
+        # Cleanup
+        kill $COORD_PID $NODE1_PID $NODE2_PID 2>/dev/null || true
+
+        exit $TEST_RESULT
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: latest
+        args: --timeout=5m

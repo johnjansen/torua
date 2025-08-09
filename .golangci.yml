@@ -1,0 +1,293 @@
+# golangci-lint configuration for Torua project
+# Run with: golangci-lint run
+
+run:
+  # Timeout for analysis
+  timeout: 5m
+
+  # Exit code when at least one issue was found
+  issues-exit-code: 1
+
+  # Include test files
+  tests: true
+
+  # List of build tags to use
+  build-tags:
+    - integration
+
+  # Which dirs to skip
+  skip-dirs:
+    - vendor
+    - .agent
+    - bin
+    - dist
+    - test-results
+
+  # Which files to skip
+  skip-files:
+    - ".*_test\\.go$"
+    - "doc\\.go$"
+
+output:
+  # Format of output
+  format: colored-line-number
+
+  # Print lines of code with issue
+  print-issued-lines: true
+
+  # Print linter name in the end of issue text
+  print-linter-name: true
+
+  # Make issues output unique by line
+  uniq-by-line: true
+
+  # Sort results by: filepath, line and column
+  sort-results: true
+
+linters:
+  enable:
+    # Default linters
+    - errcheck      # Check for unchecked errors
+    - gosimple      # Simplify code
+    - govet         # Vet examines Go source code
+    - ineffassign   # Detect ineffectual assignments
+    - staticcheck   # Static analysis
+    - typecheck     # Type-check Go code
+    - unused        # Check for unused constants, variables, functions and types
+
+    # Additional linters
+    - bodyclose     # Check whether HTTP response body is closed
+    - dogsled       # Check for too many blank identifiers
+    - dupl          # Check for duplicated code
+    - exportloopref # Check for pointers to enclosing loop variables
+    - gocognit      # Check cognitive complexity
+    - goconst       # Find repeated strings that could be constants
+    - gocritic      # Comprehensive linter
+    - gocyclo       # Check cyclomatic complexity
+    - gofmt         # Check whether code was gofmt-ed
+    - goimports     # Check import statements
+    - gomnd         # Detect magic numbers
+    - goprintffuncname # Check that printf-like functions are named with 'f'
+    - gosec         # Security problems
+    - lll           # Report long lines
+    - misspell      # Find commonly misspelled words
+    - nakedret      # Find naked returns
+    - noctx         # Find sending http request without context.Context
+    - nolintlint    # Report ill-formed or insufficient nolint directives
+    - prealloc      # Find slice declarations that could be preallocated
+    - revive        # Fast, configurable linter
+    - rowserrcheck  # Check whether Err of rows is checked
+    - sqlclosecheck # Check that sql.Rows and sql.Stmt are closed
+    - stylecheck    # Stylecheck is a replacement for golint
+    - unconvert     # Detect unnecessary type conversions
+    - unparam       # Report unused function parameters
+    - whitespace    # Detection of leading and trailing whitespace
+
+  disable:
+    - deadcode      # Deprecated
+    - exhaustivestruct # Too strict
+    - gochecknoglobals # We use some globals
+    - gochecknoinits   # We use init functions
+    - godot         # Too strict about comments
+    - godox         # We allow TODOs
+    - golint        # Deprecated
+    - interfacer    # Deprecated
+    - maligned      # Deprecated
+    - nlreturn      # Too strict
+    - nosnakecase   # Deprecated
+    - scopelint     # Deprecated
+    - structcheck   # Deprecated
+    - varcheck      # Deprecated
+    - wsl           # Too strict about whitespace
+
+linters-settings:
+  errcheck:
+    # Report about not checking of errors in type assertions
+    check-type-assertions: true
+    # Report about assignment of errors to blank identifier
+    check-blank: true
+
+  govet:
+    # Report about shadowed variables
+    check-shadowing: true
+    enable-all: true
+
+  gocyclo:
+    # Minimal cyclomatic complexity to report
+    min-complexity: 15
+
+  gocognit:
+    # Minimal cognitive complexity to report
+    min-complexity: 20
+
+  dupl:
+    # Minimal length of code to be considered as duplicate
+    threshold: 100
+
+  goconst:
+    # Minimal length of string constant
+    min-len: 3
+    # Minimal occurrences count to trigger
+    min-occurrences: 3
+
+  lll:
+    # Max line length
+    line-length: 120
+    # Tab width in spaces
+    tab-width: 4
+
+  misspell:
+    # Locale to use
+    locale: US
+
+  gomnd:
+    settings:
+      mnd:
+        # List of enabled checks
+        checks:
+          - argument
+          - case
+          - condition
+          - operation
+          - return
+          - assign
+        # Ignored numbers
+        ignored-numbers:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+          - '10'
+          - '100'
+          - '1000'
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc
+      - unnamedResult # We sometimes use unnamed results
+      - hugeParam # Sometimes we need to pass large structs
+
+  revive:
+    # Maximum number of open files
+    max-open-files: 2048
+    # When set to false, ignores files with "GENERATED" header
+    ignore-generated-header: true
+    severity: warning
+    rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: redefines-builtin-id
+
+issues:
+  # List of regexps of issue texts to exclude
+  exclude:
+    - 'declaration of "(err|ctx)" shadows declaration at'
+    - 'should have comment or be unexported'
+
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - gomnd
+        - unparam
+        - lll
+
+    # Exclude known test files
+    - path: test/
+      linters:
+        - gosec
+        - dupl
+        - gomnd
+
+    # Exclude vendor
+    - path: vendor/
+      linters:
+        - typecheck
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    # Exclude generated files
+    - path: ".*\\.pb\\.go"
+      linters:
+        - golint
+        - stylecheck
+
+    # Exclude main package from some linters
+    - path: cmd/
+      linters:
+        - gomnd
+        - dupl
+
+  # Maximum issues count per one linter
+  max-issues-per-linter: 50
+
+  # Maximum count of issues with the same text
+  max-same-issues: 3
+
+  # Show only new issues created after git revision
+  new: false
+
+severity:
+  # Default value is empty string.
+  # Set the default severity for issues.
+  # If severity rules are defined and the issues do not match or no severity is provided to the rule
+  # this will be the default severity applied.
+  # Severities should match the supported severity names of the selected out format.
+  # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
+  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#severity
+  # - Github: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  default-severity: error
+
+  # If set to true severity-rules regular expressions become case sensitive
+  case-sensitive: false
+
+  # When a list of severity rules are provided, severity information will be added to lint issues.
+  # Severity rules have the same filtering capability as exclude rules except you are allowed to specify one matcher per severity rule.
+  # Only affects out formats that support setting severity information
+  rules:
+    - linters:
+        - dupl
+      severity: info
+    - linters:
+        - gomnd
+        - goconst
+        - gocritic
+      severity: warning
