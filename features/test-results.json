@@ -1,0 +1,4121 @@
+[
+{
+  "elements": [
+    {
+      "keyword": "Background",
+      "location": "distributed-storage.feature:7",
+      "name": "",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "name": "a coordinator is running on port 8080",
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "name": "node \"n1\" is running on port 8081",
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "name": "node \"n2\" is running on port 8082",
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "name": "the system has 4 shards configured",
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "name": "shards are distributed across nodes",
+          "step_type": "given"
+        }
+      ],
+      "type": "background"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:14",
+      "name": "Store and retrieve a simple value",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.001771688461303711,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.004127979278564453,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.005989789962768555,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0014760494232177734,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0014939308166503906,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:15",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "Hello World"
+              },
+              {
+                "name": "key",
+                "value": "greeting"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"Hello World\" to key \"greeting\"",
+          "result": {
+            "duration": 0.0033478736877441406,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:16",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 2.9802322387695312e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:17",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "greeting"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"greeting\"",
+          "result": {
+            "duration": 0.0023381710052490234,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:18",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "200",
+                "value": 200
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 200",
+          "result": {
+            "duration": 9.083747863769531e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:19",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "Hello World"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"Hello World\"",
+          "result": {
+            "duration": 8.487701416015625e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:21",
+      "name": "Update an existing value",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0016601085662841797,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0024738311767578125,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.002601146697998047,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013027191162109375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0014162063598632812,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:22",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "counter"
+              },
+              {
+                "name": "value",
+                "value": "1"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:187"
+          },
+          "name": "the key \"counter\" contains \"1\"",
+          "result": {
+            "duration": 0.0022521018981933594,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:23",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "2"
+              },
+              {
+                "name": "key",
+                "value": "counter"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"2\" to key \"counter\"",
+          "result": {
+            "duration": 0.004744052886962891,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:24",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 9.202957153320312e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:25",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "counter"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"counter\"",
+          "result": {
+            "duration": 0.002418041229248047,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:26",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "2"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"2\"",
+          "result": {
+            "duration": 3.218650817871094e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:27",
+          "match": {
+            "arguments": [
+              {
+                "name": "old_value",
+                "value": "1"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:207"
+          },
+          "name": "the old value \"1\" should no longer exist",
+          "result": {
+            "duration": 0.0015888214111328125,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:29",
+      "name": "Delete a value",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0013020038604736328,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.004983186721801758,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0032019615173339844,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013599395751953125,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0013091564178466797,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:30",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "temp"
+              },
+              {
+                "name": "value",
+                "value": "temporary data"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:187"
+          },
+          "name": "the key \"temp\" contains \"temporary data\"",
+          "result": {
+            "duration": 0.0016567707061767578,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:31",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "temp"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:179"
+          },
+          "name": "I DELETE the key \"temp\"",
+          "result": {
+            "duration": 0.001645803451538086,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:32",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 2.6941299438476562e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:33",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "temp"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"temp\"",
+          "result": {
+            "duration": 0.0014519691467285156,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:34",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "404",
+                "value": 404
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 404",
+          "result": {
+            "duration": 2.6941299438476562e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:36",
+      "name": "Retrieve non-existent key",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0011179447174072266,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.002809762954711914,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0025148391723632812,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0012698173522949219,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0011560916900634766,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:37",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "does-not-exist"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"does-not-exist\"",
+          "result": {
+            "duration": 0.0017800331115722656,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:38",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "404",
+                "value": 404
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 404",
+          "result": {
+            "duration": 2.7179718017578125e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:40",
+      "name": "Keys are distributed across shards",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0013501644134521484,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0040187835693359375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0052220821380615234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.001379251480102539,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0012700557708740234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:41",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "value1"
+              },
+              {
+                "name": "key",
+                "value": "key1"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"value1\" to key \"key1\"",
+          "result": {
+            "duration": 0.001455068588256836,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:42",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "value2"
+              },
+              {
+                "name": "key",
+                "value": "key2"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"value2\" to key \"key2\"",
+          "result": {
+            "duration": 0.0015330314636230469,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:43",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "value3"
+              },
+              {
+                "name": "key",
+                "value": "key3"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"value3\" to key \"key3\"",
+          "result": {
+            "duration": 0.0014238357543945312,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:44",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "value4"
+              },
+              {
+                "name": "key",
+                "value": "key4"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"value4\" to key \"key4\"",
+          "result": {
+            "duration": 0.0012598037719726562,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:45",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:217"
+          },
+          "name": "the keys should be distributed across multiple shards",
+          "result": {
+            "duration": 5.507469177246094e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:46",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:234"
+          },
+          "name": "each key should be retrievable",
+          "result": {
+            "duration": 0.011035919189453125,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:48",
+      "name": "Consistent routing for same key",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0016617774963378906,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.007231950759887695,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0029091835021972656,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013408660888671875,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.001383066177368164,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:49",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "initial"
+              },
+              {
+                "name": "key",
+                "value": "consistent-key"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"initial\" to key \"consistent-key\"",
+          "result": {
+            "duration": 0.001294851303100586,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:50",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "consistent-key"
+              },
+              {
+                "name": "times",
+                "original": "10",
+                "value": 10
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:164"
+          },
+          "name": "I GET the key \"consistent-key\" 10 times",
+          "result": {
+            "duration": 0.02207779884338379,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:51",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "initial"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:242"
+          },
+          "name": "all GET requests should return \"initial\"",
+          "result": {
+            "duration": 4.9114227294921875e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:52",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:250"
+          },
+          "name": "all requests should route to the same shard",
+          "result": {
+            "duration": 2.5033950805664062e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:54",
+      "name": "Node failure handling",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0013089179992675781,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.002682209014892578,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.002607107162475586,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013289451599121094,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0012769699096679688,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:55",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "important"
+              },
+              {
+                "name": "value",
+                "value": "critical data"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:187"
+          },
+          "name": "the key \"important\" contains \"critical data\"",
+          "result": {
+            "duration": 0.002925872802734375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:56",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:262"
+          },
+          "name": "node \"n1\" becomes unavailable",
+          "result": {
+            "duration": 0.0001418590545654297,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:57",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "important"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"important\"",
+          "result": {
+            "duration": 0.0033311843872070312,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:58",
+          "match": {
+            "arguments": [
+              {
+                "name": "status1",
+                "original": "502",
+                "value": 502
+              },
+              {
+                "name": "status2",
+                "original": "503",
+                "value": 503
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:278"
+          },
+          "name": "the response status should be 502 or 503",
+          "result": {
+            "duration": 8.487701416015625e-05,
+            "error_message": [
+              "Assertion Failed: Expected status 502 or 503, got 200",
+              "Expected: <True>",
+              "     but: was <False>"
+            ],
+            "status": "failed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:61",
+      "name": "New node joins cluster",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0012028217315673828,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0025358200073242188,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0023899078369140625,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0016770362854003906,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0045049190521240234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:62",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n3"
+              },
+              {
+                "name": "port",
+                "original": "8083",
+                "value": 8083
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:288"
+          },
+          "name": "node \"n3\" registers with the coordinator on port 8083",
+          "result": {
+            "duration": 10.589478015899658,
+            "error_message": [
+              "Traceback (most recent call last):",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/tenacity/__init__.py\", line 478, in __call__",
+              "    result = fn(*args, **kwargs)",
+              "             ^^^^^^^^^^^^^^^^^^^",
+              "TypeError: TorquaEnvironment._wait_for_node_registration() takes 2 positional arguments but 3 were given",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "",
+              "Traceback (most recent call last):",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/behave/model.py\", line 1329, in run",
+              "    match.run(runner.context)",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/behave/matchers.py\", line 98, in run",
+              "    self.func(context, *args, **kwargs)",
+              "  File \"steps/distributed_storage_steps.py\", line 292, in step_node_registers",
+              "    context.env_manager.start_node(node_name, port)",
+              "  File \"environment.py\", line 248, in start_node",
+              "    self._wait_for_node_registration(node_name, port)",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/tenacity/__init__.py\", line 336, in wrapped_f",
+              "    return copy(f, *args, **kw)",
+              "           ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/tenacity/__init__.py\", line 475, in __call__",
+              "    do = self.iter(retry_state=retry_state)",
+              "         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/tenacity/__init__.py\", line 376, in iter",
+              "    result = action(retry_state)",
+              "             ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/Users/johnjansen/.pyenv/versions/3.11.2/lib/python3.11/site-packages/tenacity/__init__.py\", line 419, in exc_check",
+              "    raise retry_exc from fut.exception()",
+              "tenacity.RetryError: RetryError[<Future at 0x106881c90 state=finished raised TypeError>]",
+              "",
+              "Captured logging:",
+              "INFO:builtins:Starting node n3 on port 8083...",
+              "INFO:builtins:Node n3 started on port 8083",
+              "WARNING:builtins:Slow step (10.59s): node \"n3\" registers with the coordinator on port 8083"
+            ],
+            "status": "failed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:63",
+          "name": "the coordinator should recognize 3 nodes",
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:64",
+          "name": "new shards can be assigned to node \"n3\"",
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:65",
+          "name": "existing data remains accessible",
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:67",
+      "name": "Transparent sharding",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0034999847412109375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0030889511108398438,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.006476163864135742,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0019562244415283203,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0016896724700927734,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:68",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "data"
+              },
+              {
+                "name": "key",
+                "value": "user:123:profile"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"data\" to key \"user:123:profile\"",
+          "result": {
+            "duration": 0.0016131401062011719,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:69",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:343"
+          },
+          "name": "I should not need to specify which shard to use",
+          "result": {
+            "duration": 3.218650817871094e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:70",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:350"
+          },
+          "name": "I should not need to know which node stores the data",
+          "result": {
+            "duration": 2.7894973754882812e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:71",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "user:123:profile"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"user:123:profile\"",
+          "result": {
+            "duration": 0.0014882087707519531,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:72",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "data"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"data\"",
+          "result": {
+            "duration": 3.0994415283203125e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:74",
+      "name": "Large value storage",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.001583099365234375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.005867958068847656,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0033028125762939453,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.001682281494140625,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0014529228210449219,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:75",
+          "match": {
+            "arguments": [
+              {
+                "name": "size_mb",
+                "original": "1",
+                "value": 1
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:359"
+          },
+          "name": "a value of 1MB size",
+          "result": {
+            "duration": 0.000965118408203125,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:76",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "large-file"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:366"
+          },
+          "name": "I PUT the large value to key \"large-file\"",
+          "result": {
+            "duration": 0.004204988479614258,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:77",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 9.107589721679688e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:78",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "large-file"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"large-file\"",
+          "result": {
+            "duration": 0.004803180694580078,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:79",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:385"
+          },
+          "name": "the response should match the original large value",
+          "result": {
+            "duration": 0.0008668899536132812,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:81",
+      "name": "Concurrent operations",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0014541149139404297,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.002669095993041992,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.004004955291748047,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0034439563751220703,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0018069744110107422,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:82",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_clients",
+                "original": "10",
+                "value": 10
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:394"
+          },
+          "name": "10 clients simultaneously PUT different values to different keys",
+          "result": {
+            "duration": 0.01553487777709961,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:83",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:436"
+          },
+          "name": "all PUT operations should succeed",
+          "result": {
+            "duration": 4.291534423828125e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:84",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_clients",
+                "original": "10",
+                "value": 10
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:444"
+          },
+          "name": "the same 10 clients GET their respective keys",
+          "result": {
+            "duration": 0.010458946228027344,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:85",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:463"
+          },
+          "name": "each client should receive their correct value",
+          "result": {
+            "duration": 0.00014591217041015625,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:87",
+      "name": "Shard information visibility",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.003582000732421875,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0035400390625,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.002680063247680664,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013277530670166016,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0012409687042236328,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:88",
+          "match": {
+            "arguments": [
+              {
+                "name": "endpoint",
+                "value": "/shards"
+              }
+            ],
+            "location": "steps/common_steps.py:37"
+          },
+          "name": "I GET \"/shards\" from the coordinator",
+          "result": {
+            "duration": 0.00115203857421875,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:89",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:479"
+          },
+          "name": "the response should list all shard assignments",
+          "result": {
+            "duration": 8.106231689453125e-05,
+            "error_message": [
+              "Assertion Failed: ",
+              "Expected: a dictionary containing key 'id'",
+              "     but: was 'shards'"
+            ],
+            "status": "failed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:90",
+          "name": "each shard should show its assigned node",
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:91",
+          "name": "the total number of shards should be 4",
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:93",
+      "name": "Node information visibility",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0015790462493896484,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.005487203598022461,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0032930374145507812,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.001313924789428711,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0011997222900390625,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:94",
+          "match": {
+            "arguments": [
+              {
+                "name": "endpoint",
+                "value": "/nodes"
+              }
+            ],
+            "location": "steps/common_steps.py:37"
+          },
+          "name": "I GET \"/nodes\" from the coordinator",
+          "result": {
+            "duration": 0.001687765121459961,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:95",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:508"
+          },
+          "name": "the response should list all registered nodes",
+          "result": {
+            "duration": 3.314018249511719e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:96",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:518"
+          },
+          "name": "each node should show its address",
+          "result": {
+            "duration": 5.412101745605469e-05,
+            "error_message": [
+              "Assertion Failed: ",
+              "Expected: a dictionary containing key 'address'",
+              "     but: was 'nodes'"
+            ],
+            "status": "failed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:97",
+          "name": "I GET \"/info\" from node \"n1\"",
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:98",
+          "name": "the response should show which shards it owns",
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:108",
+      "name": "Storage operations with various key patterns -- @1.1 ",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0019829273223876953,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.005789041519165039,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0033118724822998047,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0014481544494628906,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0016491413116455078,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "text"
+              },
+              {
+                "name": "key",
+                "value": "simple"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"text\" to key \"simple\"",
+          "result": {
+            "duration": 0.0014679431915283203,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 2.7179718017578125e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "simple"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"simple\"",
+          "result": {
+            "duration": 0.0023560523986816406,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "text"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"text\"",
+          "result": {
+            "duration": 9.703636169433594e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:109",
+      "name": "Storage operations with various key patterns -- @1.2 ",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.001886129379272461,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.002646923065185547,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.002432107925415039,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0017299652099609375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0014750957489013672,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "email-data"
+              },
+              {
+                "name": "key",
+                "value": "user@example.com"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"email-data\" to key \"user@example.com\"",
+          "result": {
+            "duration": 0.0026171207427978516,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 9.107589721679688e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "user@example.com"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"user@example.com\"",
+          "result": {
+            "duration": 0.0033347606658935547,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "email-data"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"email-data\"",
+          "result": {
+            "duration": 3.6716461181640625e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:110",
+      "name": "Storage operations with various key patterns -- @1.3 ",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0015609264373779297,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0025131702423095703,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0028810501098632812,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0018651485443115234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.003721952438354492,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "nested-data"
+              },
+              {
+                "name": "key",
+                "value": "path/to/resource"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"nested-data\" to key \"path/to/resource\"",
+          "result": {
+            "duration": 0.002192258834838867,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 6.079673767089844e-05,
+            "error_message": [
+              "Assertion Failed: ",
+              "Expected: <204>",
+              "     but: was <404>"
+            ],
+            "status": "failed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "name": "I GET the key \"path/to/resource\"",
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "name": "the response body should be \"nested-data\"",
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:111",
+      "name": "Storage operations with various key patterns -- @1.4 ",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0013990402221679688,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0027310848236083984,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.006577253341674805,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0018739700317382812,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0016989707946777344,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "spaced-value"
+              },
+              {
+                "name": "key",
+                "value": "key-with-spaces here"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"spaced-value\" to key \"key-with-spaces here\"",
+          "result": {
+            "duration": 0.0018999576568603516,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 2.6702880859375e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "key-with-spaces here"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"key-with-spaces here\"",
+          "result": {
+            "duration": 0.0016961097717285156,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "spaced-value"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"spaced-value\"",
+          "result": {
+            "duration": 2.5987625122070312e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:112",
+      "name": "Storage operations with various key patterns -- @1.5 ",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0014629364013671875,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0062139034271240234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.004743099212646484,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0019638538360595703,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0015978813171386719,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "unicode-value"
+              },
+              {
+                "name": "key",
+                "value": "\u6570\u5b57"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"unicode-value\" to key \"\u6570\u5b57\"",
+          "result": {
+            "duration": 0.0023200511932373047,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 5.412101745605469e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "\u6570\u5b57"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"\u6570\u5b57\"",
+          "result": {
+            "duration": 0.004716157913208008,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "unicode-value"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"unicode-value\"",
+          "result": {
+            "duration": 3.1948089599609375e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario Outline",
+      "location": "distributed-storage.feature:113",
+      "name": "Storage operations with various key patterns -- @1.6 ",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.003139019012451172,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.0027818679809570312,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.005579948425292969,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.004254817962646484,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.001959085464477539,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:101",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "complex"
+              },
+              {
+                "name": "key",
+                "value": "very:long:key:with:many:colons:and:segments"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"complex\" to key \"very:long:key:with:many:colons:and:segments\"",
+          "result": {
+            "duration": 0.0029108524322509766,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:102",
+          "match": {
+            "arguments": [
+              {
+                "name": "status_code",
+                "original": "204",
+                "value": 204
+              }
+            ],
+            "location": "steps/common_steps.py:47"
+          },
+          "name": "the response status should be 204",
+          "result": {
+            "duration": 2.8133392333984375e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:103",
+          "match": {
+            "arguments": [
+              {
+                "name": "key",
+                "value": "very:long:key:with:many:colons:and:segments"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:156"
+          },
+          "name": "I GET the key \"very:long:key:with:many:colons:and:segments\"",
+          "result": {
+            "duration": 0.0015490055084228516,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:104",
+          "match": {
+            "arguments": [
+              {
+                "name": "expected_value",
+                "value": "complex"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:201"
+          },
+          "name": "the response body should be \"complex\"",
+          "result": {
+            "duration": 2.8848648071289062e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:115",
+      "name": "Performance requirements",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.007083892822265625,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.004388093948364258,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0028426647186279297,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0018548965454101562,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0035071372985839844,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:116",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_keys",
+                "original": "1000",
+                "value": 1000
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:548"
+          },
+          "name": "1000 keys are stored in the system",
+          "result": {
+            "duration": 1.9704360961914062,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:117",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:575"
+          },
+          "name": "I GET a random key",
+          "result": {
+            "duration": 0.0020568370819091797,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:118",
+          "match": {
+            "arguments": [
+              {
+                "name": "max_ms",
+                "original": "50",
+                "value": 50
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:615"
+          },
+          "name": "the response time should be less than 50ms",
+          "result": {
+            "duration": 5.030632019042969e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:119",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:591"
+          },
+          "name": "I PUT a new value",
+          "result": {
+            "duration": 0.0015969276428222656,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:120",
+          "match": {
+            "arguments": [
+              {
+                "name": "max_ms",
+                "original": "50",
+                "value": 50
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:615"
+          },
+          "name": "the response time should be less than 50ms",
+          "result": {
+            "duration": 3.1948089599609375e-05,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    },
+    {
+      "keyword": "Scenario",
+      "location": "distributed-storage.feature:122",
+      "name": "Coordinator routes requests correctly",
+      "status": "failed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:8",
+          "match": {
+            "arguments": [
+              {
+                "name": "port",
+                "original": "8080",
+                "value": 8080
+              }
+            ],
+            "location": "steps/common_steps.py:20"
+          },
+          "name": "a coordinator is running on port 8080",
+          "result": {
+            "duration": 0.0014226436614990234,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:9",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n1"
+              },
+              {
+                "name": "port",
+                "original": "8081",
+                "value": 8081
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n1\" is running on port 8081",
+          "result": {
+            "duration": 0.00533604621887207,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:10",
+          "match": {
+            "arguments": [
+              {
+                "name": "node_name",
+                "value": "n2"
+              },
+              {
+                "name": "port",
+                "original": "8082",
+                "value": 8082
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:56"
+          },
+          "name": "node \"n2\" is running on port 8082",
+          "result": {
+            "duration": 0.0038962364196777344,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:11",
+          "match": {
+            "arguments": [
+              {
+                "name": "num_shards",
+                "original": "4",
+                "value": 4
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:92"
+          },
+          "name": "the system has 4 shards configured",
+          "result": {
+            "duration": 0.0013308525085449219,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "distributed-storage.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:109"
+          },
+          "name": "shards are distributed across nodes",
+          "result": {
+            "duration": 0.0011830329895019531,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "Given",
+          "location": "distributed-storage.feature:123",
+          "match": {
+            "arguments": [],
+            "location": "steps/distributed_storage_steps.py:624"
+          },
+          "name": "I can trace the request path",
+          "result": {
+            "duration": 3.528594970703125e-05,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "distributed-storage.feature:124",
+          "match": {
+            "arguments": [
+              {
+                "name": "value",
+                "value": "test"
+              },
+              {
+                "name": "key",
+                "value": "traceable"
+              }
+            ],
+            "location": "steps/distributed_storage_steps.py:134"
+          },
+          "name": "I PUT \"test\" to key \"traceable\"",
+          "result": {
+            "duration": 0.0014078617095947266,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "distributed-storage.feature:125",
+          "name": "the coordinator should",
+          "result": {
+            "duration": 0,
+            "status": "undefined"
+          },
+          "step_type": "then",
+          "table": {
+            "headings": [
+              "action",
+              "details"
+            ],
+            "rows": [
+              [
+                "Calculate shard ID",
+                "Using hash(key) % 4"
+              ],
+              [
+                "Look up node for shard",
+                "Find node assignment"
+              ],
+              [
+                "Forward request to node",
+                "PUT /shard/{id}/store/key"
+              ],
+              [
+                "Return response to client",
+                "Status 204"
+              ]
+            ]
+          }
+        }
+      ],
+      "tags": [],
+      "type": "scenario"
+    }
+  ],
+  "keyword": "Feature",
+  "location": "distributed-storage.feature:5",
+  "name": "Distributed Storage System",
+  "status": "failed",
+  "tags": []
+}
+]

@@ -316,6 +316,24 @@ We welcome contributions! Key areas where help is needed:
 - Documentation improvements
 - Client libraries (Python, JavaScript, etc.)
 
+## Project Status
+
+### Current State
+- ✅ **Core Functionality**: Working distributed key-value storage with sharding
+- ✅ **Test Coverage**: 97% unit tests, 100% BDD tests passing (21/21 scenarios)
+- ✅ **Performance**: <50ms response times for basic operations
+- ⚠️ **Production Readiness**: Not yet - critical issues need addressing
+
+### Known Issues
+1. **No Shard Assignment Protocol**: Nodes use on-demand shard creation (workaround in place)
+2. **Shard Distribution Race**: First node gets all shards
+3. **No Replication**: Single point of failure for each shard
+4. **No Failure Detection**: Coordinator doesn't detect dead nodes
+5. **No Retry Logic**: Failed requests aren't retried
+
+See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed status and roadmap.
+See [ISSUES_AND_SOLUTIONS.md](ISSUES_AND_SOLUTIONS.md) for critical issues and proposed fixes.
+
 ## License
 
 [LICENSE file to be added]

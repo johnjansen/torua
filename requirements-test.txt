@@ -1,0 +1,48 @@
+# BDD Testing Framework
+behave==1.2.6
+
+# HTTP Testing
+requests==2.31.0
+urllib3==2.1.0
+
+# Test Utilities
+pytest==7.4.3
+pytest-bdd==6.1.1
+pytest-cov==4.1.0
+pytest-timeout==2.2.0
+pytest-xdist==3.5.0
+
+# Assertions and Matchers
+assertpy==1.1
+hamcrest==2.1.0
+
+# Process Management
+psutil==5.9.6
+subprocess32==3.5.4; python_version < '3.2'
+
+# Data Generation
+faker==20.1.0
+factory-boy==3.3.0
+
+# JSON and Data Handling
+jsonschema==4.20.0
+deepdiff==6.7.1
+
+# Timing and Retry
+tenacity==8.2.3
+backoff==2.2.1
+
+# Logging and Debugging
+colorlog==6.8.0
+structlog==23.2.0
+
+# Environment Management
+python-dotenv==1.0.0
+
+# Concurrent Testing
+aiohttp==3.9.1
+asyncio==3.4.3; python_version < '3.4'
+
+# Mocking
+responses==0.24.1
+httmock==1.4.0

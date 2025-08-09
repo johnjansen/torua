@@ -1,0 +1,370 @@
+<testsuite name="distributed-storage.Distributed Storage System" tests="21" errors="0" failures="0" skipped="21" time="0.0" timestamp="2025-08-10T08:56:17.694302" hostname="Johns-MacBook-Pro-2.local"><testcase classname="distributed-storage.Distributed Storage System" name="Store and retrieve a simple value" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Store and retrieve a simple value
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "Hello World" to key "greeting" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "greeting" ... skipped in 0.000s
+    Then the response status should be 200 ... skipped in 0.000s
+    And the response body should be "Hello World" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Update an existing value" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Update an existing value
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given the key "counter" contains "1" ... skipped in 0.000s
+    When I PUT "2" to key "counter" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "counter" ... skipped in 0.000s
+    Then the response body should be "2" ... skipped in 0.000s
+    And the old value "1" should no longer exist ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Delete a value" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Delete a value
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given the key "temp" contains "temporary data" ... skipped in 0.000s
+    When I DELETE the key "temp" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "temp" ... skipped in 0.000s
+    Then the response status should be 404 ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Retrieve non-existent key" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Retrieve non-existent key
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I GET the key "does-not-exist" ... skipped in 0.000s
+    Then the response status should be 404 ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Keys are distributed across shards" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Keys are distributed across shards
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "value1" to key "key1" ... skipped in 0.000s
+    And I PUT "value2" to key "key2" ... skipped in 0.000s
+    And I PUT "value3" to key "key3" ... skipped in 0.000s
+    And I PUT "value4" to key "key4" ... skipped in 0.000s
+    Then the keys should be distributed across multiple shards ... skipped in 0.000s
+    And each key should be retrievable ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Consistent routing for same key" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Consistent routing for same key
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "initial" to key "consistent-key" ... skipped in 0.000s
+    And I GET the key "consistent-key" 10 times ... skipped in 0.000s
+    Then all GET requests should return "initial" ... skipped in 0.000s
+    And all requests should route to the same shard ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Node failure handling" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Node failure handling
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given the key "important" contains "critical data" ... skipped in 0.000s
+    When node "n1" becomes unavailable ... skipped in 0.000s
+    And I GET the key "important" ... skipped in 0.000s
+    Then the response status should be 502 or 503 ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="New node joins cluster" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: New node joins cluster
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When node "n3" registers with the coordinator on port 8083 ... skipped in 0.000s
+    Then the coordinator should recognize 3 nodes ... skipped in 0.000s
+    And new shards can be assigned to node "n3" ... skipped in 0.000s
+    And existing data remains accessible ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Transparent sharding" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Transparent sharding
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "data" to key "user:123:profile" ... skipped in 0.000s
+    Then I should not need to specify which shard to use ... skipped in 0.000s
+    And I should not need to know which node stores the data ... skipped in 0.000s
+    When I GET the key "user:123:profile" ... skipped in 0.000s
+    Then the response body should be "data" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Large value storage" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Large value storage
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given a value of 1MB size ... skipped in 0.000s
+    When I PUT the large value to key "large-file" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "large-file" ... skipped in 0.000s
+    Then the response should match the original large value ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Concurrent operations" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Concurrent operations
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When 10 clients simultaneously PUT different values to different keys ... skipped in 0.000s
+    Then all PUT operations should succeed ... skipped in 0.000s
+    When the same 10 clients GET their respective keys ... skipped in 0.000s
+    Then each client should receive their correct value ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Shard information visibility" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Shard information visibility
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I GET "/shards" from the coordinator ... skipped in 0.000s
+    Then the response should list all shard assignments ... skipped in 0.000s
+    And each shard should show its assigned node ... skipped in 0.000s
+    And the total number of shards should be 4 ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Node information visibility" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Node information visibility
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I GET "/nodes" from the coordinator ... skipped in 0.000s
+    Then the response should list all registered nodes ... skipped in 0.000s
+    And each node should show its address ... skipped in 0.000s
+    When I GET "/info" from node "n1" ... skipped in 0.000s
+    Then the response should show which shards it owns ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.1 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.1 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "text" to key "simple" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "simple" ... skipped in 0.000s
+    Then the response body should be "text" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.2 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.2 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "email-data" to key "user@example.com" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "user@example.com" ... skipped in 0.000s
+    Then the response body should be "email-data" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.3 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.3 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "nested-data" to key "path/to/resource" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "path/to/resource" ... skipped in 0.000s
+    Then the response body should be "nested-data" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.4 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.4 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "spaced-value" to key "key-with-spaces here" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "key-with-spaces here" ... skipped in 0.000s
+    Then the response body should be "spaced-value" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.5 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.5 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "unicode-value" to key "数字" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "数字" ... skipped in 0.000s
+    Then the response body should be "unicode-value" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Storage operations with various key patterns -- @1.6 " status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Storage operations with various key patterns -- @1.6 
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    When I PUT "complex" to key "very:long:key:with:many:colons:and:segments" ... skipped in 0.000s
+    Then the response status should be 204 ... skipped in 0.000s
+    When I GET the key "very:long:key:with:many:colons:and:segments" ... skipped in 0.000s
+    Then the response body should be "complex" ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Performance requirements" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Performance requirements
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given 1000 keys are stored in the system ... skipped in 0.000s
+    When I GET a random key ... skipped in 0.000s
+    Then the response time should be less than 50ms ... skipped in 0.000s
+    When I PUT a new value ... skipped in 0.000s
+    Then the response time should be less than 50ms ... skipped in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="distributed-storage.Distributed Storage System" name="Coordinator routes requests correctly" status="skipped" time="0"><skipped /><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Coordinator routes requests correctly
+    Given a coordinator is running on port 8080 ... skipped in 0.000s
+    And node "n1" is running on port 8081 ... skipped in 0.000s
+    And node "n2" is running on port 8082 ... skipped in 0.000s
+    And the system has 4 shards configured ... skipped in 0.000s
+    And shards are distributed across nodes ... skipped in 0.000s
+    Given I can trace the request path ... skipped in 0.000s
+    When I PUT "test" to key "traceable" ... skipped in 0.000s
+    Then the coordinator should ... skipped in 0.000s
+      | action                    | details                   |
+      | Calculate shard ID        | Using hash(key) % 4       |
+      | Look up node for shard    | Find node assignment      |
+      | Forward request to node   | PUT /shard/{id}/store/key |
+      | Return response to client | Status 204                |
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

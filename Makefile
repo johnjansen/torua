@@ -39,3 +39,58 @@ run-node:
 	NODE_ADDR=$(NODE_ADDR) \
 	COORDINATOR_ADDR=$(COORDINATOR_ADDR) \
 	go run ./cmd/node
+
+# --- BDD Testing ---
+.PHONY: bdd-install
+bdd-install:
+	python3 -m pip install -r requirements-test.txt
+	echo "BDD test dependencies installed."
+
+.PHONY: bdd-test
+bdd-test: build
+	python3 run_bdd_tests.py
+	echo "BDD tests completed."
+
+.PHONY: bdd-test-verbose
+bdd-test-verbose: build
+	python3 run_bdd_tests.py --verbose --debug
+	echo "BDD tests completed (verbose)."
+
+.PHONY: bdd-test-feature
+bdd-test-feature: build
+	python3 run_bdd_tests.py --feature $(FEATURE)
+	echo "BDD feature tests completed."
+
+.PHONY: bdd-test-coverage
+bdd-test-coverage: build
+	python3 run_bdd_tests.py --coverage
+	echo "BDD tests with coverage completed."
+
+.PHONY: bdd-dry-run
+bdd-dry-run:
+	python3 run_bdd_tests.py --dry-run
+	echo "BDD dry run completed."
+
+.PHONY: bdd-list
+bdd-list:
+	python3 run_bdd_tests.py --list-features
+	python3 run_bdd_tests.py --list-scenarios
+
+.PHONY: test-all
+test-all: test bdd-test
+	echo "All tests (unit and BDD) completed."
+
+.PHONY: test-all-coverage
+test-all-coverage: test-coverage bdd-test-coverage
+	echo "All tests with coverage completed."
+
+# --- Service Building ---
+.PHONY: build-coordinator
+build-coordinator:
+	go build $(GOFLAGS) -o bin/coordinator ./cmd/coordinator
+	echo "bin/coordinator built."
+
+.PHONY: build-node
+build-node:
+	go build $(GOFLAGS) -o bin/node ./cmd/node
+	echo "bin/node built."
