@@ -917,7 +917,7 @@ func (s *server) autoAssignShards() {
 	// Build list of healthy nodes only
 	var healthyNodes []cluster.NodeInfo
 	for _, node := range s.nodes {
-		if node.HealthStatus != healthStatusUnhealthy {
+		if node.Status != healthStatusUnhealthy {
 			healthyNodes = append(healthyNodes, node)
 		}
 	}

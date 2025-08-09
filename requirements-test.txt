@@ -14,7 +14,7 @@ pytest-xdist==3.5.0
 
 # Assertions and Matchers
 assertpy==1.1
-hamcrest==2.1.0
+PyHamcrest==2.0.4
 
 # Process Management
 psutil==5.9.6
