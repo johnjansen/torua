@@ -78,27 +78,11 @@ const (
 //	    log.Printf("Failed to store: %v", err)
 //	}
 type Shard struct {
-	// ID uniquely identifies this shard within the cluster.
-	// Immutable after creation.
-	// Valid range: [0, numShards)
-	ID int // Unique shard identifier
-
-	// Primary indicates whether this is the primary replica for the shard.
-	// Primary shards handle writes and strong consistency reads.
-	// Replica shards provide read scaling and fault tolerance.
-	// Immutable after creation.
-	Primary bool // Is this the primary or a replica?
-
 	// Store is the pluggable storage backend for this shard.
 	// Currently uses in-memory storage, but can be replaced with
 	// persistent stores (RocksDB, BadgerDB) or graph stores (Kuzu).
 	// All storage operations are delegated to this interface.
 	Store storage.Store // The storage backend for this shard
-
-	// State tracks the current operational state of the shard.
-	// State transitions must be coordinated with the cluster coordinator.
-	// Protected by mu for thread-safe updates.
-	State ShardState // Current shard state
 
 	// Stats tracks operational metrics for monitoring and optimization.
 	// Updated atomically to avoid lock contention.
@@ -109,6 +93,22 @@ type Shard struct {
 	// Uses RWMutex to allow concurrent reads when possible.
 	// Not needed for Stats (atomic) or Store (thread-safe).
 	mu sync.RWMutex // Protects state changes
+
+	// State tracks the current operational state of the shard.
+	// State transitions must be coordinated with the cluster coordinator.
+	// Protected by mu for thread-safe updates.
+	State ShardState // Current shard state
+
+	// ID uniquely identifies this shard within the cluster.
+	// Immutable after creation.
+	// Valid range: [0, numShards)
+	ID int // Unique shard identifier
+
+	// Primary indicates whether this is the primary replica for the shard.
+	// Primary shards handle writes and strong consistency reads.
+	// Replica shards provide read scaling and fault tolerance.
+	// Immutable after creation.
+	Primary bool // Is this the primary or a replica?
 }
 
 // ShardStats tracks operational statistics for a shard, providing insights into
@@ -623,7 +623,7 @@ func (s *Shard) DeleteRange(start, end string) int {
 	keysToDelete := s.ListKeysInRange(start, end)
 
 	for _, key := range keysToDelete {
-		s.Delete(key)
+		_ = s.Delete(key)
 	}
 
 	return len(keysToDelete)

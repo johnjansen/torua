@@ -14,6 +14,13 @@ import (
 	"github.com/dreamware/torua/internal/cluster"
 )
 
+const (
+	// Health status constants
+	statusHealthy   = "healthy"
+	statusUnhealthy = "unhealthy"
+	statusUnknown   = "unknown"
+)
+
 // NodeHealth tracks the health status of a single node in the cluster.
 // It maintains the current status, last successful check time, and failure count.
 // Thread-safe: Protected by HealthMonitor's mutex when accessed.
@@ -225,10 +232,10 @@ func (h *HealthMonitor) checkNode(node cluster.NodeInfo) {
 		// Mark as unhealthy if exceeded max failures
 		if health.ConsecutiveFails >= h.maxFailures {
 			previousStatus := health.Status
-			health.Status = "unhealthy"
+			health.Status = statusUnhealthy
 
 			// Trigger callback if this is a state change
-			if previousStatus != "unhealthy" && h.onUnhealthy != nil {
+			if previousStatus != statusUnhealthy && h.onUnhealthy != nil {
 				log.Printf("Node %s marked as unhealthy after %d failures",
 					node.ID, health.ConsecutiveFails)
 				// Call callback without holding the lock
@@ -237,10 +244,10 @@ func (h *HealthMonitor) checkNode(node cluster.NodeInfo) {
 		}
 	} else {
 		// Health check succeeded
-		if health.Status == "unhealthy" {
+		if health.Status == statusUnhealthy {
 			log.Printf("Node %s recovered and is now healthy", node.ID)
 		}
-		health.Status = "healthy"
+		health.Status = statusHealthy
 		health.ConsecutiveFails = 0
 		health.LastHealthy = time.Now()
 	}
@@ -271,7 +278,11 @@ func (h *HealthMonitor) defaultHealthCheck(addr string) error {
 		url = strings.TrimRight(url, "/") + "/health"
 	}
 
-	resp, err := h.httpClient.Get(url)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	resp, err := h.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("health check request failed: %w", err)
 	}

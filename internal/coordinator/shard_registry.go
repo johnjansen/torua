@@ -33,11 +33,6 @@ import (
 //	    IsPrimary: true,
 //	}
 type ShardAssignment struct {
-	// ShardID is the unique identifier for this shard.
-	// Valid range: [0, numShards)
-	// Shards are numbered sequentially for simplicity.
-	ShardID int // The shard identifier
-
 	// NodeID identifies the node that owns this shard.
 	// Must match a registered node's ID in the cluster.
 	// Format: typically "node-{number}" or UUID.
@@ -47,6 +42,11 @@ type ShardAssignment struct {
 	// Primary: Handles writes and strongly consistent reads
 	// Replica: Handles eventually consistent reads, provides fault tolerance
 	IsPrimary bool // Whether this is the primary or a replica
+
+	// ShardID is the unique identifier for this shard.
+	// Valid range: [0, numShards)
+	// Shards are numbered sequentially for simplicity.
+	ShardID int // The shard identifier
 }
 
 // ShardRegistry manages shard-to-node assignments in the cluster, serving as the
@@ -88,13 +88,13 @@ type ShardAssignment struct {
 //   - 128 shards = ~12KB
 //   - 1024 shards = ~100KB
 type ShardRegistry struct {
-	// mu protects concurrent access to the assignments map.
-	// Uses RWMutex to allow multiple concurrent readers.
-	mu sync.RWMutex // Protects concurrent access
-
 	// assignments maps shard IDs to their current assignments.
 	// A shard may be unassigned (not in map) during transitions.
 	assignments map[int]*ShardAssignment // shardID -> assignment
+
+	// mu protects concurrent access to the assignments map.
+	// Uses RWMutex to allow multiple concurrent readers.
+	mu sync.RWMutex // Protects concurrent access
 
 	// numShards is the total number of shards in the cluster.
 	// This is fixed at registry creation and determines the

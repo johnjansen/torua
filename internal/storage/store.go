@@ -230,15 +230,15 @@ type StoreStats struct {
 //	    log.Fatal(err)
 //	}
 type MemoryStore struct {
-	// mu protects concurrent access to the data map.
-	// Uses RWMutex to allow multiple concurrent readers
-	// when no writer is active.
-	mu sync.RWMutex // Protects concurrent access
-
 	// data holds the key-value pairs in memory.
 	// Using map provides O(1) average case operations.
 	// All stored values are copies to prevent external modification.
 	data map[string][]byte // Key-value storage
+
+	// mu protects concurrent access to the data map.
+	// Uses RWMutex to allow multiple concurrent readers
+	// when no writer is active.
+	mu sync.RWMutex // Protects concurrent access
 }
 
 // NewMemoryStore creates a new in-memory store ready for immediate use.
