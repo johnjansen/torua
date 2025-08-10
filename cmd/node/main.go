@@ -228,7 +228,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Health check endpoint for monitoring
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
@@ -275,7 +275,9 @@ func main() {
 	// Initiate graceful shutdown with timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_ = s.Shutdown(ctx)
+	if err := s.Shutdown(ctx); err != nil {
+		log.Printf("Server shutdown error: %v", err)
+	}
 	log.Println("node stopped")
 }
 
@@ -500,7 +502,7 @@ func handleShardRequest(node *Node, w http.ResponseWriter, r *http.Request) {
 //   - key: Storage key to retrieve
 //   - w: HTTP response writer
 //   - r: HTTP request (unused but kept for consistency)
-func handleGet(s *shard.Shard, key string, w http.ResponseWriter, r *http.Request) {
+func handleGet(s *shard.Shard, key string, w http.ResponseWriter, _ *http.Request) {
 	value, err := s.Get(key)
 	if err != nil {
 		if err.Error() == "key not found" {
@@ -512,7 +514,7 @@ func handleGet(s *shard.Shard, key string, w http.ResponseWriter, r *http.Reques
 	}
 
 	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Write(value)
+	_, _ = w.Write(value)
 }
 
 // handlePut stores a value in the shard's storage backend, creating or
@@ -576,7 +578,7 @@ func handlePut(s *shard.Shard, key string, w http.ResponseWriter, r *http.Reques
 //   - key: Storage key to remove
 //   - w: HTTP response writer
 //   - r: HTTP request (unused but kept for consistency)
-func handleDelete(s *shard.Shard, key string, w http.ResponseWriter, r *http.Request) {
+func handleDelete(s *shard.Shard, key string, w http.ResponseWriter, _ *http.Request) {
 	if err := s.Delete(key); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -622,7 +624,7 @@ func handleListKeys(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // handleShardStats returns operational statistics for monitoring shard
@@ -686,7 +688,7 @@ func handleShardStats(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // handleNodeInfo returns comprehensive information about the node and all its

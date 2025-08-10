@@ -151,7 +151,9 @@ func main() {
 	// Initiate graceful shutdown with timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_ = httpSrv.Shutdown(ctx)
+	if err := httpSrv.Shutdown(ctx); err != nil {
+		log.Printf("HTTP server shutdown error: %v", err)
+	}
 	log.Println("coordinator stopped")
 }
 
@@ -173,6 +175,11 @@ func main() {
 //   - 100 nodes = ~20KB memory overhead
 //   - Registry overhead depends on shard count (see ShardRegistry docs)
 type server struct {
+	// mu protects concurrent access to the nodes slice.
+	// Uses RWMutex to allow multiple concurrent readers for list operations
+	// while ensuring exclusive access during registration/updates.
+	mu sync.RWMutex
+
 	// nodes contains all registered nodes in the cluster.
 	// Nodes are identified by unique ID and include connection address.
 	// Updated during registration; removed on failure detection (future).
@@ -185,11 +192,6 @@ type server struct {
 
 	// healthMonitor periodically checks node health status
 	healthMonitor *coordinator.HealthMonitor
-
-	// mu protects concurrent access to the nodes slice.
-	// Uses RWMutex to allow multiple concurrent readers for list operations
-	// while ensuring exclusive access during registration/updates.
-	mu sync.RWMutex
 }
 
 // newServer creates and initializes a new coordinator server instance with
@@ -857,9 +859,9 @@ func (s *server) handleShardAssign(w http.ResponseWriter, r *http.Request) {
 
 	// Parse assignment request
 	var req struct {
-		ShardID   int    `json:"shard_id"`
 		NodeID    string `json:"node_id"`
 		IsPrimary bool   `json:"is_primary"`
+		ShardID   int    `json:"shard_id"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
