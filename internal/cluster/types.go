@@ -248,7 +248,7 @@ func PostJSON(ctx context.Context, url string, body, out any) error {
 //	}
 func GetJSON(ctx context.Context, url string, out any) error {
 	// Create HTTP request with context
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return err
 	}

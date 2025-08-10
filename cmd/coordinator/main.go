@@ -486,9 +486,9 @@ func (s *server) handleBroadcast(w http.ResponseWriter, r *http.Request) {
 
 	// Return summary of broadcast results
 	if err := json.NewEncoder(w).Encode(struct {
-		SentTo  int      `json:"sent_to"`
 		Results []result `json:"results"`
-	}{SentTo: len(out), Results: out}); err != nil {
+		SentTo  int      `json:"sent_to"`
+	}{Results: out, SentTo: len(out)}); err != nil {
 		log.Printf("Error encoding broadcast results: %v", err)
 	}
 }

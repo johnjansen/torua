@@ -18,10 +18,10 @@ import (
 // It maintains the current status, last successful check time, and failure count.
 // Thread-safe: Protected by HealthMonitor's mutex when accessed.
 type NodeHealth struct {
-	NodeID           string    // Unique identifier of the node
-	Status           string    // Current status: "healthy", "unhealthy", "unknown"
 	LastCheck        time.Time // Timestamp of the last health check attempt
 	LastHealthy      time.Time // Timestamp of the last successful health check
+	NodeID           string    // Unique identifier of the node
+	Status           string    // Current status: "healthy", "unhealthy", "unknown"
 	ConsecutiveFails int       // Number of consecutive failed health checks
 }
 
@@ -29,17 +29,17 @@ type NodeHealth struct {
 // It tracks node health status and triggers shard redistribution when nodes fail.
 // Thread-safe: All methods are safe for concurrent access.
 type HealthMonitor struct {
-	interval    time.Duration           // How often to check node health
-	timeout     time.Duration           // HTTP timeout for health checks
-	maxFailures int                     // Failures before marking unhealthy
 	nodes       map[string]*NodeHealth  // Current health status per node
-	mu          sync.RWMutex            // Protects nodes map
+	httpClient  *http.Client            // HTTP client for health checks
 	checkFunc   func(addr string) error // Function to perform health check
 	onUnhealthy func(nodeID string)     // Callback when node becomes unhealthy
-	httpClient  *http.Client            // HTTP client for health checks
 	ctx         context.Context         // Context for cancellation
 	cancel      context.CancelFunc      // Cancel function for shutdown
+	interval    time.Duration           // How often to check node health
+	timeout     time.Duration           // HTTP timeout for health checks
+	mu          sync.RWMutex            // Protects nodes map
 	wg          sync.WaitGroup          // Wait group for graceful shutdown
+	maxFailures int                     // Failures before marking unhealthy
 }
 
 // NewHealthMonitor creates a new health monitor with the specified check interval.
@@ -90,7 +90,7 @@ func (h *HealthMonitor) SetOnUnhealthy(callback func(nodeID string)) {
 
 // Start begins the health monitoring process in the current goroutine.
 // It periodically checks all nodes provided by the nodeProvider function.
-// This method blocks until the context is cancelled.
+// This method blocks until the context is canceled.
 //
 // Parameters:
 //   - ctx: Context for cancellation (use monitor's internal context)

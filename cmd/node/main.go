@@ -626,7 +626,9 @@ func handleListKeys(s *shard.Shard, w http.ResponseWriter, _ *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding response: %v", err)
+	}
 }
 
 // handleShardStats returns operational statistics for monitoring shard
@@ -667,7 +669,7 @@ func handleListKeys(s *shard.Shard, w http.ResponseWriter, _ *http.Request) {
 //   - s: Shard instance to get stats from
 //   - w: HTTP response writer
 //   - r: HTTP request (unused but kept for consistency)
-func handleShardStats(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
+func handleShardStats(s *shard.Shard, w http.ResponseWriter, _ *http.Request) {
 	stats := s.GetStats()
 
 	response := struct {
@@ -690,7 +692,9 @@ func handleShardStats(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding shard stats: %v", err)
+	}
 }
 
 // handleNodeInfo returns comprehensive information about the node and all its
@@ -743,7 +747,7 @@ func handleShardStats(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
 //   - node: Node instance to query
 //   - w: HTTP response writer
 //   - r: HTTP request (unused but kept for consistency)
-func handleNodeInfo(node *Node, w http.ResponseWriter, r *http.Request) {
+func handleNodeInfo(node *Node, w http.ResponseWriter, _ *http.Request) {
 	node.mu.RLock()
 	defer node.mu.RUnlock()
 
@@ -763,7 +767,9 @@ func handleNodeInfo(node *Node, w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding node info: %v", err)
+	}
 }
 
 // getenv retrieves an environment variable with a default fallback value,
