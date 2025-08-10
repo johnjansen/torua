@@ -514,7 +514,9 @@ func handleGet(s *shard.Shard, key string, w http.ResponseWriter, _ *http.Reques
 	}
 
 	w.Header().Set("Content-Type", "application/octet-stream")
-	_, _ = w.Write(value)
+	if _, err := w.Write(value); err != nil {
+		log.Printf("Error writing response: %v", err)
+	}
 }
 
 // handlePut stores a value in the shard's storage backend, creating or
@@ -612,7 +614,7 @@ func handleDelete(s *shard.Shard, key string, w http.ResponseWriter, _ *http.Req
 //   - s: Shard instance to list keys from
 //   - w: HTTP response writer
 //   - r: HTTP request (unused but kept for consistency)
-func handleListKeys(s *shard.Shard, w http.ResponseWriter, r *http.Request) {
+func handleListKeys(s *shard.Shard, w http.ResponseWriter, _ *http.Request) {
 	keys := s.ListKeys()
 
 	response := struct {

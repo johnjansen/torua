@@ -111,7 +111,7 @@ func main() {
 	mux.HandleFunc("/register", srv.handleRegister)   // POST: Register/update node
 	mux.HandleFunc("/nodes", srv.handleListNodes)     // GET: List all nodes
 	mux.HandleFunc("/broadcast", srv.handleBroadcast) // POST: Broadcast to all nodes
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
@@ -175,16 +175,6 @@ func main() {
 //   - 100 nodes = ~20KB memory overhead
 //   - Registry overhead depends on shard count (see ShardRegistry docs)
 type server struct {
-	// mu protects concurrent access to the nodes slice.
-	// Uses RWMutex to allow multiple concurrent readers for list operations
-	// while ensuring exclusive access during registration/updates.
-	mu sync.RWMutex
-
-	// nodes contains all registered nodes in the cluster.
-	// Nodes are identified by unique ID and include connection address.
-	// Updated during registration; removed on failure detection (future).
-	nodes []cluster.NodeInfo
-
 	// registry manages shard-to-node assignments for data distribution.
 	// Uses consistent hashing to map keys to shards and shards to nodes.
 	// Thread-safe: handles its own synchronization internally.
@@ -192,6 +182,16 @@ type server struct {
 
 	// healthMonitor periodically checks node health status
 	healthMonitor *coordinator.HealthMonitor
+
+	// nodes contains all registered nodes in the cluster.
+	// Nodes are identified by unique ID and include connection address.
+	// Updated during registration; removed on failure detection (future).
+	nodes []cluster.NodeInfo
+
+	// mu protects concurrent access to the nodes slice.
+	// Uses RWMutex to allow multiple concurrent readers for list operations
+	// while ensuring exclusive access during registration/updates.
+	mu sync.RWMutex
 }
 
 // newServer creates and initializes a new coordinator server instance with
@@ -364,7 +364,7 @@ func (s *server) markNodeUnhealthy(nodeID string) {
 // Thread safety:
 //   - Uses read lock for concurrent access
 //   - Snapshot isolation: changes during encoding won't affect output
-func (s *server) handleListNodes(w http.ResponseWriter, r *http.Request) {
+func (s *server) handleListNodes(w http.ResponseWriter, _ *http.Request) {
 	// Acquire read lock for concurrent access
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -390,9 +390,11 @@ func (s *server) handleListNodes(w http.ResponseWriter, r *http.Request) {
 
 	// Encode node list as JSON response
 	// Ignoring encoder error as it only fails on unmarshalable types
-	_ = json.NewEncoder(w).Encode(struct {
+	if err := json.NewEncoder(w).Encode(struct {
 		Nodes []cluster.NodeInfo `json:"nodes"`
-	}{Nodes: nodes})
+	}{Nodes: nodes}); err != nil {
+		log.Printf("Error encoding nodes response: %v", err)
+	}
 }
 
 // handleBroadcast sends a request to all registered nodes in parallel, useful
@@ -483,10 +485,12 @@ func (s *server) handleBroadcast(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return summary of broadcast results
-	_ = json.NewEncoder(w).Encode(struct {
+	if err := json.NewEncoder(w).Encode(struct {
 		SentTo  int      `json:"sent_to"`
 		Results []result `json:"results"`
-	}{SentTo: len(targets), Results: out})
+	}{SentTo: len(out), Results: out}); err != nil {
+		log.Printf("Error encoding broadcast results: %v", err)
+	}
 }
 
 // handleData routes data operations to the appropriate shard/node based on
@@ -809,7 +813,9 @@ func (s *server) handleShards(w http.ResponseWriter, r *http.Request) {
 
 	// Return JSON response
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding shards response: %v", err)
+	}
 }
 
 // handleShardAssign manually assigns a shard to a node for administrative

@@ -32,6 +32,11 @@ import (
 //	    Addr: "192.168.1.10:8081",
 //	}
 type NodeInfo struct {
+	// LastHealthCheck records when the node was last checked by the coordinator.
+	// Used to track monitoring freshness and detect stale health data.
+	// Zero value indicates the node has never been health checked.
+	LastHealthCheck time.Time `json:"last_health_check,omitempty"`
+
 	// ID is the unique identifier for this node within the cluster.
 	// It must be unique across all nodes and stable across restarts.
 	// Format: typically "node-{number}" or UUID.
@@ -49,11 +54,6 @@ type NodeInfo struct {
 	// Updated by the coordinator's health monitoring system.
 	// Example: "healthy" for responsive nodes, "unhealthy" after failures
 	Status string `json:"status,omitempty"`
-
-	// LastHealthCheck records when the node was last checked by the coordinator.
-	// Used to track monitoring freshness and detect stale health data.
-	// Zero value indicates the node has never been health checked.
-	LastHealthCheck time.Time `json:"last_health_check,omitempty"`
 }
 
 // RegisterRequest encapsulates the data sent by a node when registering
@@ -168,7 +168,7 @@ var httpClient = &http.Client{Timeout: 5 * time.Second}
 //	if err != nil {
 //	    log.Printf("Registration failed: %v", err)
 //	}
-func PostJSON(ctx context.Context, url string, body any, out any) error {
+func PostJSON(ctx context.Context, url string, body, out any) error {
 	// Marshal request body to JSON
 	reqBody, err := json.Marshal(body)
 	if err != nil {
