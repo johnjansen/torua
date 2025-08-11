@@ -109,7 +109,7 @@ jobs:
           git log --pretty=format:"* @%an" $(git describe --tags --abbrev=0 HEAD^)..HEAD | sort -u >> changelog.md
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ steps.version.outputs.VERSION }}
           body_path: changelog.md
