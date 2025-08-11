@@ -17,7 +17,7 @@ assertpy==1.1
 PyHamcrest==2.1.0
 
 # Process Management
-psutil==5.9.6
+psutil==7.0.0
 subprocess32==3.5.4; python_version < '3.2'
 
 # Data Generation
