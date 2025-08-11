@@ -21,7 +21,7 @@ psutil==5.9.6
 subprocess32==3.5.4; python_version < '3.2'
 
 # Data Generation
-faker==20.1.0
+faker==37.5.3
 factory-boy==3.3.3
 
 # JSON and Data Handling
