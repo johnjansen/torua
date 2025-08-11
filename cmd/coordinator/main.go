@@ -56,6 +56,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -539,9 +540,23 @@ func (s *server) handleBroadcast(w http.ResponseWriter, r *http.Request) {
 func (s *server) handleData(w http.ResponseWriter, r *http.Request) {
 	// Extract key from path: /data/{key}
 	// Supports keys with slashes (e.g., /data/user/profile/123)
-	key := r.URL.Path[len("/data/"):]
+	prefix := "/data/"
+	if !strings.HasPrefix(r.URL.Path, prefix) || len(r.URL.Path) <= len(prefix) {
+		http.Error(w, "key required", http.StatusBadRequest)
+		return
+	}
+	key := r.URL.Path[len(prefix):]
 	if key == "" {
 		http.Error(w, "key required", http.StatusBadRequest)
+		return
+	}
+
+	// Check HTTP method first to return proper status codes
+	switch r.Method {
+	case http.MethodGet, http.MethodPut, http.MethodDelete:
+		// These methods are allowed, continue processing
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -574,7 +589,7 @@ func (s *server) handleData(w http.ResponseWriter, r *http.Request) {
 	shardID := s.registry.GetShardForKey(key)
 
 	// Forward the request to the node's shard-specific endpoint
-	targetURL := fmt.Sprintf("%s/shard/%d/store/%s", nodeAddr, shardID, key)
+	targetURL := fmt.Sprintf("%s/shards/%d/data/%s", nodeAddr, shardID, key)
 
 	// Route based on HTTP method
 	switch r.Method {
@@ -584,8 +599,6 @@ func (s *server) handleData(w http.ResponseWriter, r *http.Request) {
 		s.forwardPut(targetURL, w, r)
 	case http.MethodDelete:
 		s.forwardDelete(targetURL, w, r)
-	default:
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -613,6 +626,12 @@ func (s *server) handleData(w http.ResponseWriter, r *http.Request) {
 //   - w: Response writer to client
 //   - r: Original client request (for context)
 func (s *server) forwardGet(targetURL string, w http.ResponseWriter, r *http.Request) {
+	// Validate URL is not empty
+	if targetURL == "" {
+		http.Error(w, "no node available for this shard", http.StatusServiceUnavailable)
+		return
+	}
+
 	// Create request with timeout to prevent hanging
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
@@ -671,6 +690,12 @@ func (s *server) forwardGet(targetURL string, w http.ResponseWriter, r *http.Req
 //   - w: Response writer to client
 //   - r: Original client request (for body and context)
 func (s *server) forwardPut(targetURL string, w http.ResponseWriter, r *http.Request) {
+	// Validate URL is not empty
+	if targetURL == "" {
+		http.Error(w, "no node available for this shard", http.StatusServiceUnavailable)
+		return
+	}
+
 	// Read entire body for forwarding
 	// TODO: Consider streaming for large bodies
 	body, err := io.ReadAll(r.Body)
@@ -688,6 +713,11 @@ func (s *server) forwardPut(targetURL string, w http.ResponseWriter, r *http.Req
 		// Shouldn't happen unless URL is malformed
 		http.Error(w, "failed to create request", http.StatusInternalServerError)
 		return
+	}
+
+	// Copy Content-Type header if present
+	if contentType := r.Header.Get("Content-Type"); contentType != "" {
+		req.Header.Set("Content-Type", contentType)
 	}
 
 	// Forward request to node
@@ -731,6 +761,12 @@ func (s *server) forwardPut(targetURL string, w http.ResponseWriter, r *http.Req
 //   - w: Response writer to client
 //   - r: Original client request (for context)
 func (s *server) forwardDelete(targetURL string, w http.ResponseWriter, r *http.Request) {
+	// Validate URL is not empty
+	if targetURL == "" {
+		http.Error(w, "no node available for this shard", http.StatusServiceUnavailable)
+		return
+	}
+
 	// Create request with timeout to prevent hanging
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
@@ -875,6 +911,22 @@ func (s *server) handleShardAssign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate that the node exists in the cluster
+	s.mu.RLock()
+	nodeExists := false
+	for _, node := range s.nodes {
+		if node.ID == req.NodeID {
+			nodeExists = true
+			break
+		}
+	}
+	s.mu.RUnlock()
+
+	if !nodeExists {
+		http.Error(w, fmt.Sprintf("node %s not found in cluster", req.NodeID), http.StatusBadRequest)
+		return
+	}
+
 	// Perform assignment through registry
 	if err := s.registry.AssignShard(req.ShardID, req.NodeID, req.IsPrimary); err != nil {
 		// Registry returns errors for invalid shard IDs or other issues
@@ -882,8 +934,8 @@ func (s *server) handleShardAssign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return success with no content
-	w.WriteHeader(http.StatusNoContent)
+	// Return success
+	w.WriteHeader(http.StatusOK)
 }
 
 // autoAssignShards automatically distributes unassigned shards among registered
