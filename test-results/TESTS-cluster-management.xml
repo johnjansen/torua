@@ -1,133 +1,188 @@
-<testsuite name="cluster-management.Cluster Management" tests="18" errors="0" failures="0" skipped="18" time="0.0" timestamp="2025-08-10T11:33:32.340048" hostname="Johns-MacBook-Pro-2.local"><testcase classname="cluster-management.Cluster Management" name="Initial cluster formation" status="untested" time="0"><skipped /><system-out>
+<testsuite name="cluster-management.Cluster Management" tests="18" errors="1" failures="14" skipped="0" time="11.240587" timestamp="2025-08-11T14:47:17.074813" hostname="Johns-MacBook-Pro-2.local"><testcase classname="cluster-management.Cluster Management" name="Initial cluster formation" status="passed" time="0.016409"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Initial cluster formation
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When I query the cluster status ... untested in 0.000s
-    Then the coordinator should be healthy ... untested in 0.000s
-    And there should be 2 registered nodes ... untested in 0.000s
-    And all nodes should be marked as healthy ... untested in 0.000s
-    And shards should be evenly distributed ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... passed in 0.002s
+    When I query the cluster status ... passed in 0.008s
+    Then the coordinator should be healthy ... passed in 0.000s
+    And there should be 2 registered nodes ... passed in 0.000s
+    And all nodes should be marked as healthy ... passed in 0.004s
+    And shards should be evenly distributed ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node health monitoring" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node health monitoring" status="passed" time="9.621766"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Node health monitoring
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given node "n1" is healthy ... untested in 0.000s
-    When node "n1" stops responding to health checks ... untested in 0.000s
-    Then within 10 seconds the coordinator should mark node "n1" as unhealthy ... untested in 0.000s
-    And the coordinator should attempt to redistribute shards from node "n1" ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... passed in 0.002s
+    Given node "n1" is healthy ... passed in 0.002s
+    When node "n1" stops responding to health checks ... passed in 0.022s
+    Then within 10 seconds the coordinator should mark node "n1" as unhealthy ... passed in 7.589s
+    And the coordinator should attempt to redistribute shards from node "n1" ... passed in 2.004s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node graceful shutdown" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node graceful shutdown" status="failed" time="0.007771"><error type="AttributeError" message="'Context' object has no attribute 'nodes'">
+<![CDATA[
+Failing step: When node "n1" initiates graceful shutdown ... failed in 0.002s
+Location: features/cluster-management.feature:25
+Traceback (most recent call last):
+  File "/Users/johnjansen/.venvs/science/lib/python3.9/site-packages/behave/model.py", line 1329, in run
+    match.run(runner.context)
+  File "/Users/johnjansen/.venvs/science/lib/python3.9/site-packages/behave/matchers.py", line 98, in run
+    self.func(context, *args, **kwargs)
+  File "features/steps/cluster_management_steps.py", line 448, in step_node_graceful_shutdown
+    if node_id in context.nodes:
+  File "/Users/johnjansen/.venvs/science/lib/python3.9/site-packages/behave/runner.py", line 321, in __getattr__
+    raise AttributeError(msg)
+AttributeError: 'Context' object has no attribute 'nodes'
+]]>
+</error><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Node graceful shutdown
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given node "n1" has 2 shards assigned ... untested in 0.000s
-    When node "n1" initiates graceful shutdown ... untested in 0.000s
-    Then node "n1" should notify the coordinator ... untested in 0.000s
-    And the coordinator should reassign node "n1"'s shards to other nodes ... untested in 0.000s
-    And node "n1" should wait for confirmation before shutting down ... untested in 0.000s
-    And no data should be lost during the transition ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... passed in 0.002s
+    Given node "n1" has 2 shards assigned ... passed in 0.002s
+    When node "n1" initiates graceful shutdown ... failed in 0.002s
+    Then node "n1" should notify the coordinator ... skipped in 0.000s
+    And the coordinator should reassign node "n1"'s shards to other nodes ... skipped in 0.000s
+    And node "n1" should wait for confirmation before shutting down ... skipped in 0.000s
+    And no data should be lost during the transition ... skipped in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="New node auto-registration" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="New node auto-registration" status="passed" time="1.536812"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: New node auto-registration
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When a new node "n3" starts on port 8083 ... untested in 0.000s
-    Then node "n3" should automatically register with the coordinator ... untested in 0.000s
-    And the coordinator should add node "n3" to the cluster ... untested in 0.000s
-    And node "n3" should appear in the nodes list within 5 seconds ... untested in 0.000s
-    And the coordinator should consider rebalancing shards ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... passed in 0.002s
+    When a new node "n3" starts on port 8083 ... passed in 0.518s
+    Then node "n3" should automatically register with the coordinator ... passed in 1.008s
+    And the coordinator should add node "n3" to the cluster ... passed in 0.002s
+    And node "n3" should appear in the nodes list within 5 seconds ... passed in 0.002s
+    And the coordinator should consider rebalancing shards ... passed in 0.002s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Shard rebalancing after node addition" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Shard rebalancing after node addition" status="failed" time="0.004373"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Shard rebalancing after node addition
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given the cluster has 4 shards distributed across 2 nodes ... untested in 0.000s
-    When a new node "n3" joins the cluster ... untested in 0.000s
-    Then the coordinator should detect the imbalance ... untested in 0.000s
-    And the coordinator should redistribute shards for even distribution ... untested in 0.000s
-    And each node should have approximately the same number of shards ... untested in 0.000s
-    And data accessibility should be maintained during rebalancing ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given the cluster has 4 shards distributed across 2 nodes ... skipped in 0.000s
+    When a new node "n3" joins the cluster ... skipped in 0.000s
+    Then the coordinator should detect the imbalance ... skipped in 0.000s
+    And the coordinator should redistribute shards for even distribution ... skipped in 0.000s
+    And each node should have approximately the same number of shards ... skipped in 0.000s
+    And data accessibility should be maintained during rebalancing ... skipped in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Coordinator failover detection" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Coordinator failover detection" status="failed" time="0.004237"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Coordinator failover detection
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given a backup coordinator is configured ... untested in 0.000s
-    When the primary coordinator becomes unresponsive ... untested in 0.000s
-    Then nodes should detect the coordinator failure ... untested in 0.000s
-    And nodes should attempt to connect to the backup coordinator ... untested in 0.000s
-    And the cluster should continue operating with the backup coordinator ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given a backup coordinator is configured ... undefined in 0.000s
+    When the primary coordinator becomes unresponsive ... undefined in 0.000s
+    Then nodes should detect the coordinator failure ... undefined in 0.000s
+    And nodes should attempt to connect to the backup coordinator ... undefined in 0.000s
+    And the cluster should continue operating with the backup coordinator ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Split-brain prevention" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Split-brain prevention" status="failed" time="0.003928"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Split-brain prevention
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given the cluster has 3 nodes ... untested in 0.000s
-    When network partition splits node "n3" from the coordinator ... untested in 0.000s
-    Then node "n3" should stop accepting write requests ... untested in 0.000s
-    And the coordinator should mark node "n3" as unreachable ... untested in 0.000s
-    And the majority partition should continue operating ... untested in 0.000s
-    And node "n3" should attempt to rejoin when connectivity is restored ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given the cluster has 3 nodes ... undefined in 0.000s
+    When network partition splits node "n3" from the coordinator ... undefined in 0.000s
+    Then node "n3" should stop accepting write requests ... undefined in 0.000s
+    And the coordinator should mark node "n3" as unreachable ... undefined in 0.000s
+    And the majority partition should continue operating ... undefined in 0.000s
+    And node "n3" should attempt to rejoin when connectivity is restored ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node capacity limits" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node capacity limits" status="failed" time="0.004838"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Node capacity limits
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given node "n1" has a maximum shard capacity of 4 ... untested in 0.000s
-    And node "n1" already has 4 shards assigned ... untested in 0.000s
-    When the coordinator needs to assign a new shard ... untested in 0.000s
-    Then the coordinator should not assign it to node "n1" ... untested in 0.000s
-    And the coordinator should choose a node with available capacity ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.003s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given node "n1" has a maximum shard capacity of 4 ... undefined in 0.000s
+    And node "n1" already has 4 shards assigned ... undefined in 0.000s
+    When the coordinator needs to assign a new shard ... undefined in 0.000s
+    Then the coordinator should not assign it to node "n1" ... undefined in 0.000s
+    And the coordinator should choose a node with available capacity ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Cluster information API" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Cluster information API" status="failed" time="0.004012"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Cluster information API
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When I GET "/cluster/info" from the coordinator ... untested in 0.000s
-    Then the response should include ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    When I GET "/cluster/info" from the coordinator ... skipped in 0.000s
+    Then the response should include ... undefined in 0.000s
       | field               | description                  |
       | cluster_id          | Unique cluster identifier    |
       | coordinator_version | Version of coordinator       |
@@ -141,14 +196,22 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node information API" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Node information API" status="failed" time="0.003739"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Node information API
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When I GET "/nodes/{node_id}/info" from the coordinator ... untested in 0.000s
-    Then the response should include ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    When I GET "/nodes/{node_id}/info" from the coordinator ... skipped in 0.000s
+    Then the response should include ... undefined in 0.000s
       | field              | description                   |
       | node_id            | Unique node identifier        |
       | address            | Node network address          |
@@ -161,79 +224,119 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Bulk node operations" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Bulk node operations" status="failed" time="0.004964"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.003s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Bulk node operations
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given I have 3 healthy nodes in the cluster ... untested in 0.000s
-    When I POST "/nodes/maintenance" with node list ["n1", "n2"] ... untested in 0.000s
-    Then nodes "n1" and "n2" should enter maintenance mode ... untested in 0.000s
-    And their shards should be redistributed to node "n3" ... untested in 0.000s
-    And the nodes should stop accepting new shards ... untested in 0.000s
-    But the nodes should continue serving existing data ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.003s
+    Given I have 3 healthy nodes in the cluster ... undefined in 0.000s
+    When I POST "/nodes/maintenance" with node list ["n1", "n2"] ... undefined in 0.000s
+    Then nodes "n1" and "n2" should enter maintenance mode ... undefined in 0.000s
+    And their shards should be redistributed to node "n3" ... undefined in 0.000s
+    And the nodes should stop accepting new shards ... undefined in 0.000s
+    But the nodes should continue serving existing data ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Cluster-wide configuration update" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Cluster-wide configuration update" status="failed" time="0.005033"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Cluster-wide configuration update
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When I PUT "/cluster/config" with new configuration ... untested in 0.000s
-    Then the coordinator should validate the configuration ... untested in 0.000s
-    And the coordinator should broadcast the update to all nodes ... untested in 0.000s
-    And all nodes should acknowledge the configuration change ... untested in 0.000s
-    And the new configuration should take effect cluster-wide ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.003s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    When I PUT "/cluster/config" with new configuration ... undefined in 0.000s
+    Then the coordinator should validate the configuration ... undefined in 0.000s
+    And the coordinator should broadcast the update to all nodes ... undefined in 0.000s
+    And all nodes should acknowledge the configuration change ... undefined in 0.000s
+    And the new configuration should take effect cluster-wide ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Emergency shard evacuation" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Emergency shard evacuation" status="failed" time="0.003657"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Emergency shard evacuation
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given node "n1" is experiencing hardware issues ... untested in 0.000s
-    When I POST "/nodes/n1/evacuate" ... untested in 0.000s
-    Then the coordinator should immediately start moving shards off node "n1" ... untested in 0.000s
-    And the evacuation should prioritize primary shards ... untested in 0.000s
-    And the coordinator should report evacuation progress ... untested in 0.000s
-    And node "n1" should be marked as "evacuating" ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given node "n1" is experiencing hardware issues ... undefined in 0.000s
+    When I POST "/nodes/n1/evacuate" ... undefined in 0.000s
+    Then the coordinator should immediately start moving shards off node "n1" ... undefined in 0.000s
+    And the evacuation should prioritize primary shards ... undefined in 0.000s
+    And the coordinator should report evacuation progress ... undefined in 0.000s
+    And node "n1" should be marked as "evacuating" ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Automatic failure recovery" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Automatic failure recovery" status="failed" time="0.003861"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Automatic failure recovery
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given node "n2" has been offline for 5 minutes ... untested in 0.000s
-    And node "n2"'s shards have been reassigned ... untested in 0.000s
-    When node "n2" comes back online ... untested in 0.000s
-    Then node "n2" should re-register with the coordinator ... untested in 0.000s
-    And the coordinator should mark node "n2" as available ... untested in 0.000s
-    But the coordinator should not automatically reassign shards back ... untested in 0.000s
-    And manual rebalancing should be required ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given node "n2" has been offline for 5 minutes ... undefined in 0.000s
+    And node "n2"'s shards have been reassigned ... undefined in 0.000s
+    When node "n2" comes back online ... undefined in 0.000s
+    Then node "n2" should re-register with the coordinator ... undefined in 0.000s
+    And the coordinator should mark node "n2" as available ... undefined in 0.000s
+    But the coordinator should not automatically reassign shards back ... undefined in 0.000s
+    And manual rebalancing should be required ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Monitoring metrics exposure" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Monitoring metrics exposure" status="failed" time="0.003758"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Monitoring metrics exposure
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    When I GET "/metrics" from the coordinator ... untested in 0.000s
-    Then the response should be in Prometheus format ... untested in 0.000s
-    And it should include metrics for ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    When I GET "/metrics" from the coordinator ... skipped in 0.000s
+    Then the response should be in Prometheus format ... undefined in 0.000s
+    And it should include metrics for ... undefined in 0.000s
       | metric_type        | description                |
       | node_count         | Number of nodes by status  |
       | shard_distribution | Shards per node            |
@@ -245,54 +348,78 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Rolling cluster upgrade" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Rolling cluster upgrade" status="failed" time="0.003916"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Rolling cluster upgrade
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given all nodes are running version "1.0.0" ... untested in 0.000s
-    When I initiate a rolling upgrade to version "1.1.0" ... untested in 0.000s
-    Then the coordinator should upgrade nodes one at a time ... untested in 0.000s
-    And each node should gracefully transfer its shards before upgrading ... untested in 0.000s
-    And the cluster should remain available throughout the upgrade ... untested in 0.000s
-    And all nodes should report version "1.1.0" when complete ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given all nodes are running version "1.0.0" ... undefined in 0.000s
+    When I initiate a rolling upgrade to version "1.1.0" ... undefined in 0.000s
+    Then the coordinator should upgrade nodes one at a time ... undefined in 0.000s
+    And each node should gracefully transfer its shards before upgrading ... undefined in 0.000s
+    And the cluster should remain available throughout the upgrade ... undefined in 0.000s
+    And all nodes should report version "1.1.0" when complete ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Load-based shard rebalancing" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Load-based shard rebalancing" status="failed" time="0.003596"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
 
   @slow
   Scenario: Load-based shard rebalancing
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given the cluster is experiencing uneven load distribution ... untested in 0.000s
-    When node "n1" consistently shows 80% higher load than other nodes ... untested in 0.000s
-    Then the coordinator should detect the load imbalance ... untested in 0.000s
-    And the coordinator should identify hot shards on node "n1" ... untested in 0.000s
-    And the coordinator should redistribute hot shards to less loaded nodes ... untested in 0.000s
-    And the load should become more evenly distributed ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given the cluster is experiencing uneven load distribution ... undefined in 0.000s
+    When node "n1" consistently shows 80% higher load than other nodes ... undefined in 0.000s
+    Then the coordinator should detect the load imbalance ... undefined in 0.000s
+    And the coordinator should identify hot shards on node "n1" ... undefined in 0.000s
+    And the coordinator should redistribute hot shards to less loaded nodes ... undefined in 0.000s
+    And the load should become more evenly distributed ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Multi-coordinator consensus" status="untested" time="0"><skipped /><system-out>
+</system-out></testcase><testcase classname="cluster-management.Cluster Management" name="Multi-coordinator consensus" status="failed" time="0.003917"><failure type="AssertionError" message="&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;&#10;">
+<![CDATA[
+Failing step: And the cluster starts with 2 nodes ... failed in 0.002s
+Location: features/cluster-management.feature:8
+Assertion Failed: 
+Expected: <2>
+     but: was <3>
+]]>
+</failure><system-out>
 <![CDATA[
 @scenario.begin
 
   @integration
   Scenario: Multi-coordinator consensus
-    Given a coordinator is running on port 8080 ... untested in 0.000s
-    And the cluster starts with 2 nodes ... untested in 0.000s
-    Given 3 coordinator instances are running for high availability ... untested in 0.000s
-    When the leader coordinator receives a cluster state change ... untested in 0.000s
-    Then the leader should replicate the change to follower coordinators ... untested in 0.000s
-    And all coordinators should reach consensus on the new state ... untested in 0.000s
-    And any coordinator should be able to serve read requests ... untested in 0.000s
-    But only the leader should handle write operations ... untested in 0.000s
+    Given a coordinator is running on port 8080 ... passed in 0.002s
+    And the cluster starts with 2 nodes ... failed in 0.002s
+    Given 3 coordinator instances are running for high availability ... undefined in 0.000s
+    When the leader coordinator receives a cluster state change ... undefined in 0.000s
+    Then the leader should replicate the change to follower coordinators ... undefined in 0.000s
+    And all coordinators should reach consensus on the new state ... undefined in 0.000s
+    And any coordinator should be able to serve read requests ... undefined in 0.000s
+    But only the leader should handle write operations ... undefined in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------

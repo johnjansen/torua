@@ -1,5 +1,6 @@
 # golangci-lint configuration for Torua project
 # Run with: golangci-lint run
+# Version: 1.54.0
 
 run:
   # Timeout for analysis
