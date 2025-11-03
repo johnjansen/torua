@@ -162,7 +162,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
 
       - name: Build and push coordinator
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile.coordinator
@@ -175,7 +175,7 @@ jobs:
             ghcr.io/${{ github.repository }}-coordinator:latest
 
       - name: Build and push node
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile.node
